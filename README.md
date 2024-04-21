@@ -1,6 +1,6 @@
 # PersonalTrainer
 
-## L'applicazione
+### L'applicazione
 
 PersonalTrainer è un'applicazione desktop parte di un progetto scolastico mirato all'approfondimento di *Windows Presentation Foundation* (WPF) e del pattern architetturale *Model-View-ViewModel* (MVVM) e verrà presentata come mio capolavoro sulla piattaforma europea UNICA.
 
