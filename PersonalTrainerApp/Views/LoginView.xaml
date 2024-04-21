@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="PersonalTrainerApp.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PersonalTrainerApp.Views" 
+             xmlns:viewmodels="clr-namespace:PersonalTrainerApp.ViewModels"
+             mc:Ignorable="d" 
+             Height="600" Width="400" Margin="0">
+
+    <Border Background="White" CornerRadius="30" MouseDown="DragWindow">
+        <Grid Margin="50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <!--#region Title -->
+
+            <Label HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="40" FontWeight="DemiBold" Content="{Binding Title}"></Label>
+            <Image HorizontalAlignment="Right" VerticalAlignment="Top" Height="24" Width="24" Source="/Resources/Icons/x.png" Cursor="Hand" MouseDown="Image_MouseDown"></Image>
+
+            <!--#endregion-->
+
+            <!--#region Logo -->
+
+            <Image Grid.Row="1" Height="160" Width="160" Source="/Resources/Icons/logofull.png"></Image>
+            
+            <!--#endregion-->
+            
+            <!--#region Error -->
+
+            <Label Grid.Row="2" Name="lblError" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="14" Foreground="Red" Content="{Binding Error}"/>
+
+            <!--#endregion-->
+
+            <!--#region Username -->
+
+            <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Left" FontSize="18">Username</TextBlock>
+                <TextBox Name="tbUsername" MaxLength="20" MaxLines="1" Height="28" Width="280" VerticalContentAlignment="Center" FontSize="18" GotFocus="tbUsername_GotFocus"></TextBox>
+            </StackPanel>
+            
+            <!--#endregion-->
+
+            <!--#region Password -->
+
+            <StackPanel Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <TextBlock HorizontalAlignment="Left" FontSize="18">Password</TextBlock>
+                <PasswordBox Name="pbPassword" MaxLength="20" Height="28" Width="280" VerticalContentAlignment="Center" FontSize="18" GotFocus="pbPassword_GotFocus"></PasswordBox>
+            </StackPanel>
+
+            <!--#endregion-->
+
+            <!--#region RegisterLink -->
+
+            <TextBlock Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10" FontSize="13">
+                <Hyperlink Command="{Binding UpdateViewCommand}" CommandParameter="Register">Non hai un account? Creane uno!</Hyperlink>
+            </TextBlock>
+            
+            <!--#endregion-->
+
+            <!--#region LoginButton -->
+
+            <Button Grid.Row="5" Name="btnLogin" Style="{StaticResource LoginRegisterButtonStyle}" Width="150" Click="btnLogin_Click" Cursor="Hand">Accedi</Button>
+            
+            <!--#endregion-->
+            
+        </Grid>
+    </Border>
+</UserControl>

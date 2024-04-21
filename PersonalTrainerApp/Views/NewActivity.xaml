@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="PersonalTrainerApp.Views.NewActivity"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PersonalTrainerApp.Views"
+             xmlns:wpfext="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" Height="600" Width="550" Margin="0" MouseDown="DragWindow">
+    <Border Background="{StaticResource Back}" BorderThickness="0" CornerRadius="30">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Name="tbkTitle" FontSize="24" FontWeight="DemiBold" Foreground="{StaticResource Fore}" 
+                HorizontalAlignment="Center" Text="Nuova attività"/>
+            <Image HorizontalAlignment="Right" VerticalAlignment="Top" Height="24" Width="24"
+                Source="/Resources/Icons/x.png" Cursor="Hand" MouseDown="CloseSubWindow"/>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="0,3" VerticalAlignment="Center">
+                    <TextBlock FontSize="16" HorizontalAlignment="Left" Text="Nome"/>
+                    <TextBox Name="tbName" FontSize="18" Foreground="{StaticResource Fore}" Width="260" HorizontalAlignment="Left"
+                        MaxLength="20"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="1" VerticalAlignment="Center">
+                    <TextBlock FontSize="16" HorizontalAlignment="Left" Text="Coordinate"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="20" HorizontalAlignment="Left" Text="x" Width="15"/>
+                        <wpfext:DoubleUpDown Name="dudX" FontSize="16" Foreground="{StaticResource Fore}" Width="100" 
+                            HorizontalAlignment="Left" Maximum="180" Minimum="-180"/>
+                        <TextBlock FontSize="20" HorizontalAlignment="Left" Text="y" Width="15" Margin="30,0,0,0"/>
+                        <wpfext:DoubleUpDown Name="dudY" FontSize="16" Foreground="{StaticResource Fore}" Width="100" 
+                            HorizontalAlignment="Left" Maximum="90" Minimum="-90"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="1" VerticalAlignment="Center">
+                    <TextBlock FontSize="16" Text="Lunghezza"/>
+                    <TextBox Name="tbLength" FontSize="18" Foreground="{StaticResource Fore}" Width="260" HorizontalAlignment="Left"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="1" VerticalAlignment="Center">
+                    <TextBlock FontSize="16" Text="Calorie"/>
+                    <TextBox Name="tbCalories" FontSize="18" Foreground="{StaticResource Fore}" Width="260" HorizontalAlignment="Left"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Grid.Column="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Data e ora"/>
+                    <DatePicker Margin="5" FontSize="18" Foreground="{StaticResource Fore}" VerticalAlignment="Center" Name="dpDate"/>
+                    <wpfext:TimePicker Margin="5" FontSize="19" Foreground="{StaticResource Fore}" VerticalAlignment="Center" Name="tpTime"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" HorizontalAlignment="Center">
+                    <TextBlock Grid.Column="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Immagine"/>
+                    <Image Height="180" Width="180" Source="{Binding BitmapImage}" Name="imgActivity"/>
+                    <Button Name="btnEditImage" Style="{StaticResource LoginRegisterButtonStyle}" 
+                        Width="120" Click="ChooseImage" Cursor="Hand" Margin="0,5,0,0">Scegli</Button>
+                </StackPanel>
+
+                <!-- coordinate mappa -->
+
+                <StackPanel Grid.Row="4"  VerticalAlignment="Center">
+                    <TextBlock FontSize="16" Text="Tipo attività"/>
+                    <ComboBox HorizontalAlignment="Left" FontSize="18" Height="28" Width="260" Name="cbbType"/>
+                </StackPanel>
+            </Grid>
+
+            <Label Grid.Row="2" Name="lblError" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="Red"/>
+            
+            <Button Grid.Row="3" Name="btnSave" Style="{StaticResource LoginRegisterButtonStyle}" 
+                Width="130" Click="SaveAndCloseSubWindow" Cursor="Hand">Salva</Button>
+        </Grid>
+    </Border>
+</UserControl>

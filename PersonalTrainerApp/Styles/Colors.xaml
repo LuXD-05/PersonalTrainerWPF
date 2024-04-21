@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Colori per la modalità chiara -->
+    <SolidColorBrush x:Key="Primary" Color="#FFDFF3C1" />
+    <SolidColorBrush x:Key="PrimaryHover" Color="#FFBCD498" />
+    <SolidColorBrush x:Key="Secondary" Color="#E87250" />
+    <SolidColorBrush x:Key="Tertiary" Color="#A19AAC" />
+
+    <SolidColorBrush x:Key="Back" Color="White" />
+    <SolidColorBrush x:Key="Fore" Color="Black" />
+    <SolidColorBrush x:Key="Border" Color="#FFD8D8D8" />
+    <SolidColorBrush x:Key="GeneralHover" Color="#FFD8D8D8" />
+
+</ResourceDictionary>

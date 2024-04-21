@@ -1,0 +1,230 @@
+﻿<UserControl x:Class="PersonalTrainerApp.Views.SubViews.HomeSubView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PersonalTrainerApp.Views.SubViews"
+             xmlns:controls="clr-namespace:PersonalTrainerApp.Controls"
+             xmlns:models="clr-namespace:PersonalTrainerApp.Models"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" d:DesignHeight="790" d:DesignWidth="1250">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="380"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <!--#region Left -->
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Background="{StaticResource Primary}" Grid.ColumnSpan="2"/>
+            
+            <!--Grid stats-->
+            <Border Grid.Row="1" Padding="20" Background="{StaticResource Back}" BorderThickness="0,0,0,1" BorderBrush="{StaticResource Fore}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="DemiBold">Statistiche</TextBlock>
+
+                    <Border Grid.Row="1" CornerRadius="0" BorderBrush="{StaticResource Fore}" BorderThickness="1" Padding="12,8">
+                        <!--Grafico-->
+                        <Grid>
+                            <Grid Background="{StaticResource Back}" Panel.ZIndex="1">
+                                <lvc:CartesianChart Name="lvcHome" Series="{Binding SeriesCollection}">
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Labels="{Binding Labels}">
+                                            <lvc:Axis.Separator>
+                                                <lvc:Separator IsEnabled="True" Step="1"/>
+                                            </lvc:Axis.Separator>
+                                        </lvc:Axis>
+                                    </lvc:CartesianChart.AxisX>
+                                </lvc:CartesianChart>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ActivitiesDoneThisWeek.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                            </Grid>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Panel.ZIndex="0" Text="Nessuna statistica disponibile"/>
+                        </Grid>
+                    </Border>
+                    
+                </Grid>
+            </Border>
+            
+            <!--Grid Totals-->
+            <Border Padding="20" Grid.Column="1" Grid.Row="1" Background="{StaticResource Back}" BorderThickness="0,0,0,1" BorderBrush="{StaticResource Fore}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="DemiBold">Totali</TextBlock>
+
+                    <Border Grid.Row="1" Padding="12,8">
+                        <!--Totals-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Border CornerRadius="32" Background="#FF99DD00" Margin="0,5" Grid.Row="0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-30,0,0,0">
+                                    <Image Height="40" Width="40" Margin="10,0" Source="/Resources/Icons/activity.png"/>
+                                    <TextBlock Margin="5,0" Text="Attività completate:" FontSize="20" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding TotalActivitiesDone}" FontSize="20" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Border CornerRadius="32" Background="#FF22BBFF" Margin="0,5" Grid.Row="1">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-20,0,0,0">
+                                    <Image Height="40" Width="40" Margin="10,0" Source="/Resources/Icons/distance.png"/>
+                                    <TextBlock Margin="5,0" Text="Distanza totale:" FontSize="20" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding TotalLengthDone}" FontSize="20" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Border CornerRadius="32" Background="#FFFFA500" Margin="0,5" Grid.Row="2">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-20,0,0,0">
+                                    <Image Height="40" Width="40" Margin="10,0" Source="/Resources/Icons/burn.png"/>
+                                    <TextBlock Margin="5,0" Text="Calorie totali:" FontSize="20" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding TotalCaloriesDone}" FontSize="20" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!--Grid attività-->
+            <Border Padding="15" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource Back}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" FontWeight="DemiBold">Prossime attività da fare</TextBlock>
+
+                    <Border Grid.Row="1" Padding="10,6">
+                        <Grid>
+                            <ScrollViewer Panel.ZIndex="1" Background="{StaticResource Back}" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                                <ItemsControl x:Name="icActivities" ItemsSource="{Binding TodoActivities}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type models:Activity}">
+                                            <controls:HomeActivity/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <ScrollViewer.Style>
+                                    <Style TargetType="ScrollViewer">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TodoActivities.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ScrollViewer.Style>
+                            </ScrollViewer>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Panel.ZIndex="0" Text="Nessuna attività"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!--#endregion-->
+
+        <!--#region Right-->
+
+        <Border Background="{StaticResource Primary}" BorderThickness="0" Grid.Column="1" CornerRadius="0,20,20,0">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="5*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Name="tbkProfile" FontSize="28" FontWeight="DemiBold" Foreground="{StaticResource Fore}" 
+                    HorizontalAlignment="Center" Text="Profilo"/>
+                <!--Gestire edit-->
+
+                <Ellipse Height="200" Width="200" Stroke="{StaticResource Back}" StrokeThickness="8" Grid.Row="1">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding BitmapImage}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <TextBlock Name="tbkUsername" FontSize="28" FontWeight="DemiBold" Foreground="{StaticResource Fore}" 
+                    HorizontalAlignment="Center" Text="{Binding Username}" Grid.Row="2"></TextBlock>
+
+                <TextBlock Name="tbkAge" FontSize="16" FontWeight="DemiBold" Foreground="{StaticResource Fore}" 
+                    HorizontalAlignment="Center" Text="{Binding AgeString}" Grid.Row="3"></TextBlock>
+
+                <Border BorderThickness="0,1,0,0" BorderBrush="{StaticResource Fore}" Grid.Row="4">
+                    <DockPanel>
+                        <TextBlock Name="tbkDay" FontSize="28" FontWeight="DemiBold" Foreground="{StaticResource Fore}" 
+                            HorizontalAlignment="Center" Margin="0,8,0,0" DockPanel.Dock="Top">Attività da fare oggi</TextBlock>
+                        <Grid>
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden" Background="{StaticResource Primary}" Panel.ZIndex="1">
+                                <ItemsControl ItemsSource="{Binding TodayActivities}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type models:Activity}">
+                                            <controls:CalendarActivity/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <ScrollViewer.Style>
+                                    <Style TargetType="ScrollViewer">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TodayActivities.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ScrollViewer.Style>
+                            </ScrollViewer>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Panel.ZIndex="0" Text="Nessuna attività"/>
+                        </Grid>
+                    </DockPanel>
+                </Border>
+                
+            </Grid>
+        </Border>
+
+        
+
+        <!--#endregion-->
+        
+    </Grid>
+    
+    
+</UserControl>

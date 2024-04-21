@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="PersonalTrainerApp.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PersonalTrainerApp.Views"
+             mc:Ignorable="d" Height="790" Width="1310" Loaded="HomeView_Loaded">
+
+    <Border BorderThickness="0" Background="White" CornerRadius="20,20,20,20">    <!--CornerRadius-->
+        <Grid Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"></ColumnDefinition>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--#region Left-->
+
+            <Border Background="{StaticResource Primary}" BorderThickness="0" Grid.RowSpan="2" ClipToBounds="True" CornerRadius="20,0,0,20">
+                <DockPanel>
+                    <Border Padding="5" DockPanel.Dock="Top">
+                        <Image Height="50" Width="50" Source="/Resources/Icons/logo.png"></Image>
+                    </Border>
+                    <DockPanel>
+                        <Button Name="btnLogout" Style="{StaticResource MenuButtonStyle}" DockPanel.Dock="Bottom" Command="{Binding UpdateViewCommand}" CommandParameter="Login">
+                            <Image Source="/Resources/Icons/logout.png"></Image>
+                        </Button>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <RadioButton Name="btnHome" Checked="MenuRadioButton_Checked" Style="{StaticResource MenuRadioButtonStyle}">
+                                <Image Source="/Resources/Icons/home.png"></Image>
+                            </RadioButton>
+                            <RadioButton Name="btnActivities" Checked="MenuRadioButton_Checked" Style="{StaticResource MenuRadioButtonStyle}">
+                                <Image Source="/Resources/Icons/activity.png"></Image>
+                            </RadioButton>
+                            <RadioButton Name="btnCalendar" Checked="MenuRadioButton_Checked" Style="{StaticResource MenuRadioButtonStyle}">
+                                <Image Source="/Resources/Icons/calendar.png"></Image>
+                            </RadioButton>
+                            <RadioButton Name="btnStats" Checked="MenuRadioButton_Checked" Style="{StaticResource MenuRadioButtonStyle}">
+                                <Image Source="/Resources/Icons/stats.png"></Image>
+                            </RadioButton>
+                            <RadioButton Name="btnProfile" Checked="MenuRadioButton_Checked" Style="{StaticResource MenuRadioButtonStyle}">
+                                <Image Source="/Resources/Icons/user.png"></Image>
+                            </RadioButton>
+                        </StackPanel>
+                    </DockPanel>
+                </DockPanel>
+            </Border>
+
+            <!--#endregion-->
+
+            <!--#region Main-->
+
+            
+            <ContentControl Grid.Column="1" Grid.RowSpan="2" Name="HomeContentControl" Content="{Binding SelectedViewModel.SelectedSubView}"/>
+            <Border Grid.Column="1" Background="{StaticResource Primary}" BorderThickness="0" MouseDown="DragWindow" ClipToBounds="True" CornerRadius="0,20,20,0"/>
+            
+            <!--#endregion-->
+        </Grid>
+    </Border>
+</UserControl>

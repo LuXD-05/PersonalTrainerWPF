@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="PersonalTrainerApp.Views.SubViews.ProfileSubView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PersonalTrainerApp.Views.SubViews"
+             mc:Ignorable="d" d:DesignHeight="790" d:DesignWidth="1250">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="{StaticResource Primary}" Grid.ColumnSpan="2" CornerRadius="0,20,0,0"/>
+
+        <Border Background="{StaticResource Back}" BorderThickness="0" Grid.Row="1">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,200">
+
+                <!--<TextBlock Name="tbkMode" Margin="0,12" Foreground="{StaticResource Fore}" Cursor="Hand"
+                    Style="{StaticResource ProfileOptionTextBlockStyle}" MouseDown="ChangeMode"
+                        Text="Cambia modalità"/>-->
+
+                <TextBlock Name="tbkEditCredentials" Margin="0,12" Foreground="{StaticResource Fore}" Cursor="Hand"
+                    Style="{StaticResource ProfileOptionTextBlockStyle}" MouseDown="OpenEditCredentialsWindow"
+                        Text="Modifica le tue credenziali"/>
+
+                <TextBlock Name="tbkEditProfile" Margin="0,12" Foreground="{StaticResource Fore}" Cursor="Hand"
+                    Style="{StaticResource ProfileOptionTextBlockStyle}" MouseDown="OpenEditProfileWindow"
+                        Text="Modifica i tuoi dati personali"/>
+
+                <TextBlock Name="tbkDeleteAccount" Margin="0,12" Foreground="{StaticResource Secondary}" Cursor="Hand"
+                    Style="{StaticResource ProfileOptionTextBlockStyle}" MouseDown="DeleteAccount"
+                        Text="Cancella il tuo account"/>
+
+            </StackPanel>
+        </Border>
+
+        <Border Background="{StaticResource Primary}" Grid.Column="1" Grid.Row="1" Padding="20" CornerRadius="0,0,20,0">
+            <StackPanel VerticalAlignment="Top">
+                <TextBlock FontSize="40" FontWeight="DemiBold" Margin="12,20,12,60" Foreground="{StaticResource Fore}" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Text="Profilo"/>
+                
+                <Ellipse Height="200" Width="200" Stroke="{StaticResource Back}" StrokeThickness="8" Name="elImgProfile">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding BitmapImage}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                
+                <TextBlock Name="tbkProfile" FontSize="32" FontWeight="DemiBold" Margin="12" 
+                    Foreground="{StaticResource Fore}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                           Text="{Binding Username}"/>
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</UserControl>
