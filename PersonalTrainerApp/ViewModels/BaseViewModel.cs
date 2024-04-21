@@ -3,7 +3,7 @@
 namespace PersonalTrainerApp.ViewModels
 {
     /// <summary>
-    /// Classe ViewModelbase che implementa l'INotifyPropertyChanged e da cui derivano il MainViewModel e gli altri
+    /// Base ViewModel with INotifyPropertyChanged from which MainViewModel and others derive
     /// </summary>
     public class BaseViewModel : INotifyPropertyChanged
     {
@@ -12,7 +12,9 @@ namespace PersonalTrainerApp.ViewModels
         private double _height;
         private double _width;
 
-        // Proprietà che contiene il titolo della view
+        /// <summary>
+        /// View title property
+        /// </summary>
         public string Title
         {
             get { return _title; }
@@ -27,7 +29,9 @@ namespace PersonalTrainerApp.ViewModels
         }
 
 
-        // Proprietà che contiene una stringa di errore
+        /// <summary>
+        /// Error string property
+        /// </summary>
         public string Error
         {
             get { return _error; }
@@ -41,7 +45,9 @@ namespace PersonalTrainerApp.ViewModels
             }
         }
 
-        // Proprietà per adattare l'altezza della finestra a quella della view
+        /// <summary>
+        /// Height property (to adapt window height to view's)
+        /// </summary>
         public double Height
         {
             get { return _height; }
@@ -55,7 +61,7 @@ namespace PersonalTrainerApp.ViewModels
             }
         }
 
-        // Proprietà per adattare la larghezza della finestra a quella della view
+        // Width property (to adapt window width to view's)
         public double Width
         {
             get { return _width; }
@@ -78,65 +84,3 @@ namespace PersonalTrainerApp.ViewModels
         }
     }
 }
-
-/*
- 
-Globals.xaml ------------------------------------------------------------------------------------------
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-    <Style x:Key="Font" TargetType="Window">
-        <Setter Property="FontSize" Value="14"/>
-    </Style>
-    
-    <Style x:Key="btnAddSmall" TargetType="Button">
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Height" Value="auto" />
-        <Setter Property="Width" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="FontSize" Value="16" />
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <Grid.Style>
-                            <Style TargetType="Grid">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="true">
-                                        <Setter Property="Background" Value="#FFB9B9B9"/>
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="false">
-                                        <Setter Property="Background" Value="LightGray"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Grid.Style>
-                        <TextBlock Text="{TemplateBinding Content}" 
-                                   VerticalAlignment="Center" 
-                                   HorizontalAlignment="Center"
-                                   Margin="-1,-4,0,0" >
-                        </TextBlock>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!--<Style TargetType="Image">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding Text,ElementName=tbk_titolo}" Value="magro morto">
-                <Setter Property="Source" Value="../Resources/Immagine2.png"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Text,ElementName=tbk_titolo}" Value="smily">
-                <Setter Property="Source" Value="../Resources/Immagine1.png"/>
-            </DataTrigger>
-            <Trigger Property="IsMouseOver"  Value="true">
-                <Setter Property="Source" Value="../Resources/Immagine.png"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>-->
-
-</ResourceDictionary>
-------------------------------------------------------------------------------------------------------------
-*/

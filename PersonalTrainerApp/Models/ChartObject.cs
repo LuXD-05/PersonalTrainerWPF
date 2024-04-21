@@ -9,6 +9,9 @@ using System.Collections.ObjectModel;
 
 namespace PersonalTrainerApp.Models
 {
+    /// <summary>
+    /// Class used to manage the chart
+    /// </summary>
     public class ChartObject : INotifyPropertyChanged
     {
         #region Variables
@@ -20,6 +23,9 @@ namespace PersonalTrainerApp.Models
 
         #region Properties
 
+        /// <summary>
+        /// Collection to display in the chart
+        /// </summary>
         public SeriesCollection SeriesCollection
         {
             get { return _seriesCollection; }
@@ -29,6 +35,10 @@ namespace PersonalTrainerApp.Models
                 OnPropertyChanged(nameof(SeriesCollection));
             }
         }
+
+        /// <summary>
+        /// Labels in the chart
+        /// </summary>
         public ObservableCollection<string> Labels
         {
             get { return _labels; }
@@ -46,7 +56,7 @@ namespace PersonalTrainerApp.Models
         /// <summary>
         /// Costruttore Home
         /// </summary>
-        /// <param name="u">Utente da cui ottenere le attività</param>
+        /// <param name="u">User to get activities from</param>
         public ChartObject(User u)
         {
             // Inizializzo liste
@@ -58,18 +68,17 @@ namespace PersonalTrainerApp.Models
         }
 
         /// <summary>
-        /// Costruttore stats
+        /// Stats constructor
         /// </summary>
-        /// <param name="u">Utente da cui ottenere le attività</param>
-        /// <param name="serie">Serie da visualizzare (Activities, Length, Calories, All)</param>
-        /// <param name="range">Tuple contenente la data minore del range e la data maggiore del range</param>
+        /// <param name="u">User to get activities from</param>
+        /// <param name="serie">Series to view ("Activities", "Length", "Calories", "All")</param>
+        /// <param name="range">Tuple with the smallest and the biggest date of the range</param>
         public ChartObject(User u, string serie, Tuple<DateTime, DateTime> range)
         {
-            // Inizializzo liste
+            // Init lists
             _seriesCollection = new SeriesCollection();
             _labels = new ObservableCollection<string>();
 
-            // Costruisco il chart Stats
             BuildStatsChart(u, serie, range);
         }
 
@@ -78,37 +87,37 @@ namespace PersonalTrainerApp.Models
         #region Methods
 
         /// <summary>
-        /// Costruisce il chart della home creando una SeriesCollection con delle ColumnSeries per n attività, chilometri e kilocalorie per ogni giorno della settimana corrente
+        /// Builds home chart creating a SeriesCollection with some ColumnSeries for n° activities, km and kcal foreach day of the current week
         /// </summary>
-        /// <param name="u">Utente da cui prendere le attività</param>
+        /// <param name="u">User to get activities from</param>
         public void BuildHomeChart(User u)
         {
-            // Pulisco SeriesCollection e Labels
+            // Cleans SeriesCollection and Labels
             _seriesCollection.Clear();
             _labels.Clear();
 
-            // Inizializzo liste
+            // Init lists
             var sc = new SeriesCollection();
             var l = new ObservableCollection<string>();
 
             if (u.Activities.Count == 0)
                 return;
 
-            // Serie n attività
+            // N° activities series
             var activitiesSeries = new ColumnSeries
             {
                 Title = "Attività",
                 Values = new ChartValues<int>(),
                 Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF99DD00")),
             };
-            // Serie lunghezza fatta
+            // Length done series
             var lengthSeries = new ColumnSeries
             {
                 Title = "Chilometri",
                 Values = new ChartValues<double>(),
                 Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF22BBFF")),
             };
-            // Serie calorie consumate
+            // Calories burned series
             var caloriesSeries = new ColumnSeries
             {
                 Title = "Chilocalorie",
@@ -116,115 +125,119 @@ namespace PersonalTrainerApp.Models
                 Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFA500")),
             };
 
-            // Raggruppo le attività fatte per giorno
-            var activitiesByDate = u.Activities.Where(x => x.IsDone).GroupBy(a => a.DataFull.Day);
+            // Groups activities done by day
+            var activitiesByDate = u.Activities.Where(x => x.IsDone).GroupBy(a => a.FullDate.Day);
 
-            /* per mese
+            /* " by month
             // Ottengo i giorni del mese corrente
             List<DateTime> currentMonthDays = Enumerable.Range(1, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))
                 .Select(day => new DateTime(DateTime.Now.Year, DateTime.Now.Month, day)).ToList();
             */
 
-            // Trova il primo giorno della settimana corrente (lunedì)
+            // Finds the 1st day of the week (monday)
             DateTime startOfWeek = DateTime.Today.Date.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
 
-            // Crea una lista di giorni della settimana corrente
+            // Creates a list of days of the current week
             List<DateTime> currentWeekDays = Enumerable.Range(0, 7).Select(offset => startOfWeek.AddDays(offset)).ToList();
 
-            // Per ogni giorno del mese
+            // Foreach day of the week
             foreach (DateTime day in currentWeekDays)
             {
-                // Aggiungo il giorno a asse x
+                // Adds day to x axis
                 l.Add(day.ToString("dddd") + "\r\n" + day.ToString("dd/MM"));
 
-                // Prendo il gruppo di attività del giorno se ne sono state fatte
+                // Gets the group of activities of the day (if any)
                 var dayActivities = activitiesByDate.SingleOrDefault(x => x.Key == day.Day);
 
-                // Se attività fatte
+                // If any
                 if (dayActivities != null)
                 {
-                    // Ne aggiungo i dati al chart
+                    // Adds group data to chart
                     activitiesSeries.Values.Add(dayActivities.Count());
-                    lengthSeries.Values.Add(dayActivities.Sum(a => a.Lunghezza / 1000));
-                    caloriesSeries.Values.Add(dayActivities.Sum(a => a.Calorie / 1000));
+                    lengthSeries.Values.Add(dayActivities.Sum(a => a.Length / 1000));
+                    caloriesSeries.Values.Add(dayActivities.Sum(a => a.Calories / 1000));
                 }
                 else
                 {
-                    // Se no aggiungo 0
+                    // Adds 0
                     activitiesSeries.Values.Add(0);
                     lengthSeries.Values.Add(0.0);
                     caloriesSeries.Values.Add(0.0);
                 }
             }
 
-            // Aggiungo le serie alla raccolta
+            // Adds series to the collection
             sc.Add(activitiesSeries);
             sc.Add(lengthSeries);
             sc.Add(caloriesSeries);
 
-            // Assegno le nuove SeriesCollection e Labels
+            // Adds the new SeriesCollection and Labels
             SeriesCollection = sc;
             Labels = l;
         }
 
         /// <summary>
-        /// Costruisce il chart delle stats creando una SeriesCollection con delle LineSeries le serie specificate e tra un range di date
+        /// Builds stats chart creating a SeriesCollection with some LineSeries, the specified series and between a date range
         /// </summary>
-        /// <param name="u">Utente da cui ottenere le attività</param>
-        /// <param name="serie">Serie da visualizzare (Activities, Length, Calories, All)</param>
-        /// <param name="range">Tuple contenente la data minore del range e la data maggiore del range</param>
+        /// <param name="u">User to get activities from</param>
+        /// <param name="serie">Series to view ("Activities", "Length", "Calories", "All")</param>
+        /// <param name="range">Tuple with the smallest and the biggest date of the range</param>
         public void BuildStatsChart(User u, string serie, Tuple<DateTime, DateTime> range = null)
         {
-            // Pulisco SeriesCollection e Labels
+            // Cleans SeriesCollection and Labels
             SeriesCollection.Clear();
             Labels.Clear();
 
-            // Inizializzo liste
+            // Init lists
             var sc = new SeriesCollection();
             var l = new ObservableCollection<string>();
 
             if (u.Activities.Count == 0)
                 return;
 
-            // Raggruppo le attività fatte per giorno
+            // Groups activities by day
             var activitiesByDate = new Dictionary<DateTime, List<Activity>>();
             foreach (var a in u.Activities.Where(x => x.IsDone))
             {
-                // Se ho gia un giorno con un'attività la aggiungo alla lista
-                if (activitiesByDate.ContainsKey(a.DataFull.Date))
-                    activitiesByDate.Single(x => x.Key == a.DataFull.Date).Value.Add(a);
-                // Se no metto una nuova voce di dizionario
+                // If already has a day with activity 
+                if (activitiesByDate.ContainsKey(a.FullDate.Date))
+                {
+                    // Adds it to the list
+                    activitiesByDate.Single(x => x.Key == a.FullDate.Date).Value.Add(a);
+                }
                 else
-                    activitiesByDate.Add(a.DataFull.Date, new List<Activity> { a });
+                {
+                    // Puts a new dictionary entry
+                    activitiesByDate.Add(a.FullDate.Date, new List<Activity> { a });
+                }
             }
 
-            // Ottengo i giorni in base al range (se c'è, se no tutte)
+            // Gets the days based on the range (if range = null, gets all)
             List<DateTime> days;
             if (range == null)
             {
-                // Ottengo il range di date dalla prima all'ultima di quelle in lista
+                // Gets the dates' range from the 1st to the last
                 days = Enumerable.Range(0, (activitiesByDate.Max(x => x.Key) - activitiesByDate.Min(x => x.Key)).Days + 1)
                                  .Select(offset => activitiesByDate.Min(x => x.Key).AddDays(offset)).ToList();
             }
             else
             {
-                // Ottengo il range di date dal primo valore del range al secondo
+                // Gets the dates' range from the 1st range's value to its last
                 days = Enumerable.Range(0, (range.Item2 - range.Item1).Days + 1)
                                  .Select(offset => range.Item1.AddDays(offset)).ToList();
             }
 
-            // Dichiaro le serie
             LineSeries activitiesSeries;
             LineSeries lengthSeries;
             LineSeries caloriesSeries;
 
-            // Creo le serie richieste
+            // Creates the series
             switch (serie)
             {
                 #region Activities Only
                 
                 case "Activities":
-                    // Serie n attività
+                    // N° activities series
                     activitiesSeries = new LineSeries
                     {
                         Title = "Attività",
@@ -234,26 +247,26 @@ namespace PersonalTrainerApp.Models
                         LineSmoothness = 0.2,
                     };
 
-                    // Per ogni giorno del range
+                    // Foreach day of the range
                     foreach (DateTime day in days)
                     {
-                        // Aggiungo il giorno a asse x
+                        // Adds the day to x axis
                         l.Add(day.ToString("dd/MM"));
 
-                        // Se ci sono attività per questo giorno
+                        // If there are any activities for this day
                         if (activitiesByDate.ContainsKey(day.Date))
                         {
-                            // Ne aggiungo i dati al chart
+                            // Adds its data to the chart
                             activitiesSeries.Values.Add(activitiesByDate[day.Date].Count);
                         }
                         else
                         {
-                            // Se no aggiungo 0
+                            // Adds 0
                             activitiesSeries.Values.Add(0);
                         }
                     }
 
-                    // Aggiungo le serie alla raccolta
+                    // Adds the series to the collection
                     sc.Add(activitiesSeries);
 
                     break;
@@ -263,7 +276,7 @@ namespace PersonalTrainerApp.Models
                 #region Length Only
 
                 case "Length":
-                    // Serie lunghezza fatta
+                    // Length done series
                     lengthSeries = new LineSeries
                     {
                         Title = "Chilometri",
@@ -273,26 +286,26 @@ namespace PersonalTrainerApp.Models
                         LineSmoothness = 0.2,
                     };
 
-                    // Per ogni giorno del range
+                    // Foreach day of the range
                     foreach (DateTime day in days)
                     {
-                        // Aggiungo il giorno a asse x
+                        // Adds the day to x axis
                         l.Add(day.ToString("dd/MM"));
 
-                        // Se ci sono attività per questo giorno
+                        // If there are any activities for this day
                         if (activitiesByDate.ContainsKey(day.Date))
                         {
-                            // Ne aggiungo i dati al chart
-                            lengthSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Lunghezza / 1000));
+                            // Adds its data to the chart
+                            lengthSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Length / 1000));
                         }
                         else
                         {
-                            // Se no aggiungo 0
+                            // Adds 0
                             lengthSeries.Values.Add(0.0);
                         }
                     }
 
-                    // Aggiungo le serie alla raccolta
+                    // Adds the series to the collection
                     sc.Add(lengthSeries);
 
                     break;
@@ -302,7 +315,7 @@ namespace PersonalTrainerApp.Models
                 #region Calories Only
 
                 case "Calories":
-                    // Serie calorie consumate
+                    // Calories burned series
                     caloriesSeries = new LineSeries
                     {
                         Title = "Chilocalorie",
@@ -312,26 +325,26 @@ namespace PersonalTrainerApp.Models
                         LineSmoothness = 0.2,
                     };
 
-                    // Per ogni giorno del range
+                    // Foreach day of the range
                     foreach (DateTime day in days)
                     {
-                        // Aggiungo il giorno a asse x
+                        // Adds the day to x axis
                         l.Add(day.ToString("dd/MM"));
 
-                        // Se ci sono attività per questo giorno
+                        // If there are any activities for this day
                         if (activitiesByDate.ContainsKey(day.Date))
                         {
-                            // Ne aggiungo i dati al chart
-                            caloriesSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Calorie / 1000));
+                            // Adds its data to the chart
+                            caloriesSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Calories / 1000));
                         }
                         else
                         {
-                            // Se no aggiungo 0
+                            // Adds 0
                             caloriesSeries.Values.Add(0.0);
                         }
                     }
 
-                    // Aggiungo le serie alla raccolta
+                    // Adds the series to the collection
                     sc.Add(caloriesSeries);
 
                     break;
@@ -341,7 +354,7 @@ namespace PersonalTrainerApp.Models
                 #region All
 
                 case "All":
-                    // Serie n attività
+                    // N° activities series
                     activitiesSeries = new LineSeries
                     {
                         Title = "Attività",
@@ -350,6 +363,7 @@ namespace PersonalTrainerApp.Models
                         Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF99DD00")),
                         LineSmoothness = 0.2,
                     };
+                    // Length done series
                     lengthSeries = new LineSeries
                     {
                         Title = "Chilometri",
@@ -358,7 +372,7 @@ namespace PersonalTrainerApp.Models
                         Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF22BBFF")),
                         LineSmoothness = 0.2,
                     };
-                    // Serie calorie consumate
+                    // Calories burned series
                     caloriesSeries = new LineSeries
                     {
                         Title = "Chilocalorie",
@@ -368,30 +382,30 @@ namespace PersonalTrainerApp.Models
                         LineSmoothness = 0.2,
                     };
 
-                    // Per ogni giorno del range
+                    // Foreach day of the range
                     foreach (DateTime day in days)
                     {
-                        // Aggiungo il giorno a asse x
+                        // Adds the day to x axis
                         l.Add(day.ToString("dd/MM"));
 
-                        // Se ci sono attività per questo giorno
+                        // If there are any activities for this day
                         if (activitiesByDate.ContainsKey(day.Date))
                         {
-                            // Ne aggiungo i dati al chart
+                            // Adds its data to the chart
                             activitiesSeries.Values.Add(activitiesByDate[day.Date].Count);
-                            lengthSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Lunghezza / 1000));
-                            caloriesSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Calorie / 1000));
+                            lengthSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Length / 1000));
+                            caloriesSeries.Values.Add(activitiesByDate[day.Date].Sum(a => a.Calories / 1000));
                         }
                         else
                         {
-                            // Se no aggiungo 0
+                            // Adds 0
                             activitiesSeries.Values.Add(0);
                             lengthSeries.Values.Add(0.0);
                             caloriesSeries.Values.Add(0.0);
                         }
                     }
 
-                    // Aggiungo le serie alla raccolta
+                    // Adds the series to the collection
                     sc.Add(activitiesSeries);
                     sc.Add(lengthSeries);
                     sc.Add(caloriesSeries);

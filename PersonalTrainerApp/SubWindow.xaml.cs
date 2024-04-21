@@ -17,13 +17,18 @@ namespace PersonalTrainerApp
 {
     public partial class SubWindow : Window
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="view"></param>
         public SubWindow(UserControl view)
         {
             InitializeComponent();
 
-            // Imposto il datacontext della window alla view passata
+            // Set the datacontext to the previous view
             this.DataContext = view;
 
+            // Set Width and height to the previous view's ones + 20
             this.Height = view.Height + 20;
             this.Width = view.Width + 20;
         }

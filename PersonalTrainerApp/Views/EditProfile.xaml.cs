@@ -53,10 +53,10 @@ namespace PersonalTrainerApp.Views
             // Se campi non sono vuoti o null
             if (birthdate != null && height != null && weight != null && !string.IsNullOrEmpty(img))
             {
-                // Ottengo utenti in db
+                // Gets users in the db
                 var users = FileManager.GetUsers();
 
-                // Ottengo l'indice dell'utente in questione nella lista
+                // Gets the user's index in the list
                 int i = users.IndexOf(users.Single(x => x.Username == (this.DataContext as User).Username));
 
                 // Aggiorno attributi dell'utente (List)

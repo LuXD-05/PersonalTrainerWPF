@@ -14,9 +14,9 @@ namespace PersonalTrainerApp.Models.Controllers
         #region Public Methods
 
         /// <summary>
-        /// Aggiunge un utente all'archivio xml
+        /// Adds an user to the xml archive
         /// </summary>
-        /// <param name="u">Utente da aggiungere</param>
+        /// <param name="u">User to add</param>
         public static void AddUser(User u)
         {
             try
@@ -33,19 +33,19 @@ namespace PersonalTrainerApp.Models.Controllers
         }
 
         /// <summary>
-        /// Ottiene i gli utenti dall'archivio xml
+        /// Gets user data from the xml archive
         /// </summary>
-        /// <returns>Lista di utenti</returns>
+        /// <returns>List of User</returns>
         public static List<User> GetUsers()
         {
             var l = new List<User>();
 
             try
             {
-                // Se il file esiste
+                // If file exists
                 if (File.Exists(users_path))
                 {
-                    // Lo leggo
+                    // Reads it
                     var xmls = new XmlSerializer(typeof(List<User>));
                     var sr = new StreamReader(users_path);
                     l = (List<User>)xmls.Deserialize(sr);
@@ -53,7 +53,7 @@ namespace PersonalTrainerApp.Models.Controllers
                 }
                 else
                 {
-                    // Se no lo creo
+                    // Creates it
                     var xmls = new XmlSerializer(typeof(List<User>));
                     var sw = new StreamWriter(users_path, false);
                     xmls.Serialize(sw, l);
@@ -69,9 +69,9 @@ namespace PersonalTrainerApp.Models.Controllers
         }
 
         /// <summary>
-        /// Aggiorna la lista di utenti nell'archivio xml
+        /// Updates users list in the xml archive
         /// </summary>
-        /// <param name="l">Utenti da aggiornare</param>
+        /// <param name="l">Users to update</param>
         public static void UpdateDb(List<User> l)
         {
             try

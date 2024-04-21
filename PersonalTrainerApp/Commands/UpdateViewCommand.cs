@@ -1,9 +1,5 @@
 ﻿using PersonalTrainerApp.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PersonalTrainerApp.Commands
@@ -26,38 +22,23 @@ namespace PersonalTrainerApp.Commands
 
         public void Execute(object parameter)
         {
-            /* Gestione con switch (classic)
-            switch (parameter.ToString())
-            {
-                case "Home":
-                    _viewModel.SelectedViewModel = new HomeViewModel();
-                    break;
-                case "Login":
-                    _viewModel.SelectedViewModel = new LoginViewModel();
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-            */
-
-            // Check se il parameter ha dentro qualcosa
             if (parameter != null)
             {
-                // Ottengo il nome del viewModel 
+                // Gets the ViewModel's name
                 string fullViewModelName = $"{_viewModel.GetType().Namespace}.{parameter.ToString()}ViewModel";
 
-                // Ottengo il tipo del viewModel dalla stringa
+                // Gets the ViewModel's type from the string
                 Type viewModelType = Type.GetType(fullViewModelName);
 
-                // Se il viewModel esiste
+                // If the ViewModel exists
                 if (viewModelType != null)
                 {
-                    // Creo l'istanza del tipo (come fare _viewModel.SelectedViewModel = new [nome]ViewModel())
+                    // Creates the type instance (same as _viewModel.SelectedViewModel = new [nome]ViewModel())
                     _viewModel.SelectedViewModel = Activator.CreateInstance(viewModelType) as BaseViewModel;
                 }
                 else
                 {
-                    // altrimenti eccezione viewModel non trovato
+                    // Throws exception
                     throw new ArgumentException($"ViewModel not found: {parameter.ToString()}");
                 }
             }

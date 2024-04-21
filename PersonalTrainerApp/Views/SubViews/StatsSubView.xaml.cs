@@ -6,9 +6,6 @@ using System.Windows.Controls;
 
 namespace PersonalTrainerApp.Views.SubViews
 {
-    /// <summary>
-    /// Logica di interazione per StatsSubView.xaml
-    /// </summary>
     public partial class StatsSubView : UserControl
     {
         private string _checkedRbtnName = string.Empty;
@@ -17,28 +14,28 @@ namespace PersonalTrainerApp.Views.SubViews
         {
             InitializeComponent();
 
-            // Imposto datacontext view a user
+            // Sets the datacontext as the user
             this.DataContext = (Application.Current.MainWindow.DataContext as MainViewModel).User;
 
-            // Imposto datacontext specifico del grafico
+            // Sets the specific datacontext for the graph
             lvcStats.DataContext = new ChartObject(this.DataContext as User, "All", null);
 
-            // Setto il checked radiobutton name iniziale
+            // Sets the initial checked radio button name
             _checkedRbtnName = "All";
         }
 
         /// <summary>
-        /// Filtra il grafico in base alle date nei datepicker (considerando anche il checked radiobutton name)
+        /// Filters the chart based on the date in the datepickers (considering also the checked radio button)
         /// </summary>
         private void btnFilter_Click(object sender, RoutedEventArgs e)
         {
             DateTime? start = dpStart.SelectedDate;
             DateTime? end = dpEnd.SelectedDate;
 
-            // Se data start è valida, data end è valida e data start <= data end
+            // If startdate is valid, enddate is valid and startdate <= enddate
             if (start != null && end != null && start <= end)
             {
-                // Rebuildo il chart in base al filtro
+                // Rebuilds the chart based on the filter
                 (lvcStats.DataContext as ChartObject).BuildStatsChart(this.DataContext as User, _checkedRbtnName, new Tuple<DateTime, DateTime>((DateTime)start, (DateTime)end));
             }
             else
@@ -46,17 +43,17 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Imposta il grafico per visualizzare le statistiche di: Numero attività, Chilometri, Kilocalorie o tutto (considerando anche range)
+        /// Sets the chart to view stats of: N° activities, km, kcal or all (considering range)
         /// </summary>
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            // Controllo se evento mandato da un radiobutton checkato (e se chart gia inizializzato)
+            // Checks if the event is sent by a checked radio button (e se chart gia inizializzato)
             if (sender is RadioButton rbtn && rbtn.IsChecked == true && _checkedRbtnName != string.Empty)
             {
-                // Salvo il nome del radiobutton checkato
+                // Saves the checked radio button name
                 _checkedRbtnName = rbtn.Name.Remove(0, 4);
 
-                // Rebuildo il chart in base ai filtri (il checked radibutton name e le date se presenti)
+                // Rebuilds the chart based on the filters (checked radibutton name and the dates if present)
                 if (dpStart.SelectedDate != null && dpEnd.SelectedDate != null && dpStart.SelectedDate <= dpEnd.SelectedDate)
                     (lvcStats.DataContext as ChartObject).BuildStatsChart(this.DataContext as User, _checkedRbtnName, new Tuple<DateTime, DateTime>((DateTime)dpStart.SelectedDate, (DateTime)dpEnd.SelectedDate));
                 else

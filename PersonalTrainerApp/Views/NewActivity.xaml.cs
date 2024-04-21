@@ -81,14 +81,14 @@ namespace PersonalTrainerApp.Views
                     // Se il tipo corrisponde a un valore di enum ActivityType
                     if (Enum.TryParse(t, true, out Activity.ActivityType type))
                     {
-                        // Ottengo utenti in db
+                        // Gets users in the db
                         var users = FileManager.GetUsers();
 
-                        // Ottengo l'indice dell'utente in questione nella lista
+                        // Gets the user's index in the list
                         int i = users.IndexOf(users.Single(x => x.Username == u.Username));
 
                         // Se l'attività non esiste già per l'utente
-                        if (!users[i].Activities.Any(x => x.Nome == name))
+                        if (!users[i].Activities.Any(x => x.Name == name))
                         {
                             Activity a;
 
@@ -114,7 +114,7 @@ namespace PersonalTrainerApp.Views
                         error = "Il tipo selezionato è sconosciuto.";
                 }
                 else
-                    error = "Lunghezza e calorie devono essere numeri.";
+                    error = "Length e calorie devono essere numeri.";
             }
             else
                 error = "Nessun campo può essere vuoto.";

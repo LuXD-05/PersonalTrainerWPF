@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 namespace PersonalTrainerApp.Models
 {
     /// <summary>
-    /// Classe utente
+    /// User class
     /// </summary>
     [Serializable]
     public class User : INotifyPropertyChanged
@@ -18,7 +18,7 @@ namespace PersonalTrainerApp.Models
         private string _username;
         private string _password;
         private DateTime _birthDate;
-        private string _image;  // base64string
+        private string _image;
         private double _height; // cm
         private double _weight; // kg
         private ObservableCollection<Activity> _activities;
@@ -64,7 +64,7 @@ namespace PersonalTrainerApp.Models
         {
             get
             {
-                // Se la data di nascita è gia inserita
+                // If there's a birthdate 
                 if (_birthDate != null && _birthDate != DateTime.MinValue)
                 {
                     int age = DateTime.Today.Year - _birthDate.Year;
@@ -72,7 +72,6 @@ namespace PersonalTrainerApp.Models
                         age--;
                     return age.ToString() + " anni";
                 }
-                // Altrimenti
                 else
                     return "Data di nascita non inserita";
             }
@@ -93,13 +92,13 @@ namespace PersonalTrainerApp.Models
             {
                 byte[] bytes;
 
-                // Se _image da db == "" o null, prendo l'immagine di default, altrimenti prendo quella da db
+                // if (_image from db is null or "") gets default image else gets img from db
                 if (string.IsNullOrEmpty(_image))
                     bytes = Convert.FromBase64String(App.DEFAULT_PFP);
                 else
                     bytes = Convert.FromBase64String(_image);
 
-                // Ottengo l'immagine tramite un memorystream e la ritorno
+                // Gets the img from a MemoryStream and returns it
                 var bmp = new BitmapImage();
                 bmp.BeginInit();
                 bmp.StreamSource = new MemoryStream(bytes);
@@ -116,7 +115,7 @@ namespace PersonalTrainerApp.Models
                 OnPropertyChanged(nameof(Height));
             }
         }
-        public double Weight // to int? cm
+        public double Weight
         {
             get { return _weight; }
             set 
@@ -140,23 +139,33 @@ namespace PersonalTrainerApp.Models
                 OnPropertyChanged(nameof(TotalCaloriesDone));
             }
         }
+        /// <summary>
+        /// Activities todo and ordered by FullDate
+        /// </summary>
         public ObservableCollection<Activity> TodoActivities
         {
-            get { return new ObservableCollection<Activity>(_activities.Where(x => !x.IsDone).OrderBy(x => x.DataFull)); }
+            get { return new ObservableCollection<Activity>(_activities.Where(x => !x.IsDone).OrderBy(x => x.FullDate)); }
         }
+        /// <summary>
+        /// Activities todo, of today and ordered by FullDate
+        /// </summary>
         public ObservableCollection<Activity> TodayActivities
         {
-            get { return new ObservableCollection<Activity>(_activities.Where(x => !x.IsDone && x.DataFull >= DateTime.Today && x.DataFull <= DateTime.Today.AddDays(1).AddTicks(-1)).OrderBy(x => x.DataFull)); }
+            get { return new ObservableCollection<Activity>(_activities.Where(x => !x.IsDone && x.FullDate >= DateTime.Today && x.FullDate <= DateTime.Today.AddDays(1).AddTicks(-1)).OrderBy(x => x.FullDate)); }
         }
+        /// <summary>
+        /// Activities done, of this week and ordered by FullDate
+        /// </summary>
         public ObservableCollection<Activity> ActivitiesDoneThisWeek
         {
             get
             {
-                // Trovo 1° e ultimo giorno di settimana corrente
+                // Finds the 1st and the last day of current week
                 DateTime start = DateTime.Today.Date.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
                 DateTime end = start.AddDays(6);
-                // Ritorno attività fatte tra start e end
-                return new ObservableCollection<Activity>(_activities.Where(x => x.IsDone && x.DataFull >= start && x.DataFull <= end).OrderBy(x => x.DataFull));
+
+                // Returns activities done between start and end
+                return new ObservableCollection<Activity>(_activities.Where(x => x.IsDone && x.FullDate >= start && x.FullDate <= end).OrderBy(x => x.FullDate));
             }
         }
         public int TotalActivitiesDone
@@ -165,11 +174,11 @@ namespace PersonalTrainerApp.Models
         }
         public string TotalLengthDone
         {
-            get { return _activities.Where(x => x.IsDone).Sum(x => x.Lunghezza) < 1000 ? _activities.Where(x => x.IsDone).Sum(x => x.Lunghezza) + " m" : _activities.Where(x => x.IsDone).Sum(x => x.Lunghezza) / 1000 + " km"; }
+            get { return _activities.Where(x => x.IsDone).Sum(x => x.Length) < 1000 ? _activities.Where(x => x.IsDone).Sum(x => x.Length) + " m" : _activities.Where(x => x.IsDone).Sum(x => x.Length) / 1000 + " km"; }
         }
         public string TotalCaloriesDone
         {
-            get { return _activities.Where(x => x.IsDone).Sum(x => x.Calorie) < 1000 ? _activities.Where(x => x.IsDone).Sum(x => x.Calorie) + " cal" : _activities.Where(x => x.IsDone).Sum(x => x.Calorie) / 1000 + " kcal"; }
+            get { return _activities.Where(x => x.IsDone).Sum(x => x.Calories) < 1000 ? _activities.Where(x => x.IsDone).Sum(x => x.Calories) + " cal" : _activities.Where(x => x.IsDone).Sum(x => x.Calories) / 1000 + " kcal"; }
         }
         public int SeriesId
         {
@@ -185,13 +194,10 @@ namespace PersonalTrainerApp.Models
 
         #region Constructors
 
-        /// <summary>
-        /// Costruttore vuoto
-        /// </summary>
         public User() { }
 
         /// <summary>
-        /// Costruttore con username e password
+        /// Coinstructor with username and password
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
@@ -202,21 +208,6 @@ namespace PersonalTrainerApp.Models
 
             _activities = new ObservableCollection<Activity>();
         }
-
-        #endregion
-
-        #region Methods
-
-
-
-        #endregion
-
-        #region Overrides
-
-        //public override bool Equals(object obj)
-        //{
-        //    return this._username.Equals((obj as User)._username) && this._password.Equals((obj as User)._password);
-        //}
 
         #endregion
 

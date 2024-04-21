@@ -9,7 +9,9 @@ namespace PersonalTrainerApp.ViewModels
     {
         private UserControl _selectedSubView;
 
-        // ViewModel della View corrente
+        /// <summary>
+        /// Current view's ViewModel
+        /// </summary>
         public UserControl SelectedSubView
         {
             get { return _selectedSubView; }
@@ -22,7 +24,7 @@ namespace PersonalTrainerApp.ViewModels
 
         public HomeViewModel()
         {
-            // Istanzio il ViewModel selezionato e setto quello di Home come quello di start
+            // Instances the selected ViewModel and sets Home's ViewModel as start
             SelectedSubView = new HomeSubView();
 
             Height = 790;
@@ -31,6 +33,9 @@ namespace PersonalTrainerApp.ViewModels
             Title = "Home";
         }
 
+        /// <summary>
+        /// Handles the switch between the tabs
+        /// </summary>
         public void RadioButtonChanged(object sender, RoutedEventArgs e) 
         {
             if (sender is RadioButton radioButton && radioButton.IsChecked == true)

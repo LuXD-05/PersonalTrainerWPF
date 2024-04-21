@@ -6,24 +6,21 @@ using System.Windows.Input;
 
 namespace PersonalTrainerApp.Views.SubViews
 {
-    /// <summary>
-    /// Logica di interazione per HomeSubView.xaml
-    /// </summary>
     public partial class HomeSubView : UserControl
     {
         public HomeSubView()
         {
             InitializeComponent();
 
-            // Imposto datacontext view a user
+            // Sets the datacontext as the user
             DataContext = (Application.Current.MainWindow.DataContext as MainViewModel).User;
 
-            // Imposto datacontext specifico del grafico
+            // Sets the specific datacontext for the graph
             lvcHome.DataContext = new ChartObject((Application.Current.MainWindow.DataContext as MainViewModel).User);
         }
 
         /// <summary>
-        /// Evento che gestisce lo scroll orizzontale delle attività nella dashboard
+        /// Handles the horizontal scroll for items in the dashboard
         /// </summary>
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {

@@ -34,7 +34,7 @@ namespace PersonalTrainerApp.Views
             this.DataContext = a;
 
             // Prendo il nome vecchio
-            oldName = a.Nome;
+            oldName = a.Name;
 
             // Salvo l'utente in una variabile locale per modificarlo poi nel caso (funge come se si passasse by ref)
             this.u = u;
@@ -84,35 +84,35 @@ namespace PersonalTrainerApp.Views
                     // Se il tipo corrisponde a un valore di enum ActivityType
                     if (Enum.TryParse(t, true, out Activity.ActivityType type))
                     {
-                        // Ottengo utenti in db
+                        // Gets users in the db
                         var users = FileManager.GetUsers();
 
-                        // Ottengo l'indice dell'utente in questione nella lista
+                        // Gets the user's index in the list
                         int i = users.IndexOf(users.Single(x => x.Username == u.Username));
 
                         // Ottengo l'indice dell'attività in questione nella lista
-                        var j = users[i].Activities.IndexOf(users[i].Activities.Single(x => x.Nome == oldName));
+                        var j = users[i].Activities.IndexOf(users[i].Activities.Single(x => x.Name == oldName));
 
                         // Se il nome non è == a quello di un'altra attività (eccetto quella vecchia)
-                        if (!users[i].Activities.Where(x => x != users[i].Activities[j]).Any(x => x.Nome == name))
+                        if (!users[i].Activities.Where(x => x != users[i].Activities[j]).Any(x => x.Name == name))
                         {
                             // Aggiorno attributi attività (List)
-                            users[i].Activities[j].Nome = name;
+                            users[i].Activities[j].Name = name;
                             users[i].Activities[j].Coordinate = new Location((double)cy, (double)cx);
-                            users[i].Activities[j].Lunghezza = dLength;
-                            users[i].Activities[j].Calorie = dCal;
-                            users[i].Activities[j].Tipo = type;
-                            users[i].Activities[j].DataFull = fullDate;
+                            users[i].Activities[j].Length = dLength;
+                            users[i].Activities[j].Calories = dCal;
+                            users[i].Activities[j].Type = type;
+                            users[i].Activities[j].FullDate = fullDate;
                             users[i].Activities[j].Image = img;
                             users[i].Activities[j].IsDone = done;
 
                             // Aggiorno attributi attività (Model)
-                            (this.DataContext as Activity).Nome = name;
+                            (this.DataContext as Activity).Name = name;
                             (this.DataContext as Activity).Coordinate = new Location((double)cy, (double)cx);
-                            (this.DataContext as Activity).Lunghezza = dLength;
-                            (this.DataContext as Activity).Calorie = dCal;
-                            (this.DataContext as Activity).Tipo = type;
-                            (this.DataContext as Activity).DataFull = fullDate;
+                            (this.DataContext as Activity).Length = dLength;
+                            (this.DataContext as Activity).Calories = dCal;
+                            (this.DataContext as Activity).Type = type;
+                            (this.DataContext as Activity).FullDate = fullDate;
                             (this.DataContext as Activity).Image = img;
                             (this.DataContext as Activity).IsDone = done;
 
@@ -126,7 +126,7 @@ namespace PersonalTrainerApp.Views
                         error = "Il tipo selezionato è sconosciuto.";
                 }
                 else
-                    error = "Lunghezza e calorie devono essere numeri.";
+                    error = "Length e calorie devono essere numeri.";
             }
             else
                 error = "Nessun campo può essere vuoto.";

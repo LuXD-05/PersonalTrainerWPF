@@ -5,7 +5,8 @@ using System.Windows.Input;
 namespace PersonalTrainerApp.ViewModels
 {
     /// <summary>
-    /// E' il DataContext della MainWindow e controlla la navigazione tra le varie Views in base al ViewModel corrente
+    /// It's MainWindow's datacontext and controls the navigation between views based on the current ViewModel
+    /// Here init and apply changes with the PropertyChanged, in BaseViewModel the property is declared
     /// </summary>
     public class MainViewModel : BaseViewModel
     {
@@ -13,7 +14,7 @@ namespace PersonalTrainerApp.ViewModels
         private User _user;
 
         /// <summary>
-        /// ViewModel della View corrente
+        /// View's current ViewModel
         /// </summary>
         public BaseViewModel SelectedViewModel
         {
@@ -22,17 +23,17 @@ namespace PersonalTrainerApp.ViewModels
             {
                 _selectedViewModel = value;
 
-                // Assegno height e width del ViewModel alla Window se il ViewModel e height/width != null, se no 0
+                // Sets ViewModel's height and width to the Window (if ViewModel's height/width != null, else 0)
                 this.Height = _selectedViewModel?.Height ?? 0;
                 this.Width = _selectedViewModel?.Width ?? 0;
 
-                // Resetto l'error
+                // Resets error
                 this.Error = string.Empty;
 
-                // Imposto il titolo della finestra
+                // Sets window title
                 this.Title = _selectedViewModel.Title;
 
-                // Chiamo l'OnPropertyChanged
+                // Calls OnPropertyChanged
                 OnPropertyChanged(nameof(SelectedViewModel));
             }
         }
@@ -43,26 +44,22 @@ namespace PersonalTrainerApp.ViewModels
             set
             {
                 _user = value;
-
-                // Chiamo l'OnPropertyChanged
                 OnPropertyChanged(nameof(User));
             }
         }
 
         /// <summary>
-        /// Permette di cambiare la view
+        /// Allows to change view
         /// </summary>
         public ICommand UpdateViewCommand { get; set; }
 
         public MainViewModel()
         {
-            // Istanzio il Command per cambiare le views
+            // Instantiates the command to change views
             UpdateViewCommand = new UpdateViewCommand(this);
 
-            // Istanzio il ViewModel selezionato e setto quello di Login come quello di start
+            // Instantiates the selected ViewModel and sets Login ViewModel as start
             SelectedViewModel = new LoginViewModel();
         }
-
-        // FUNZIONAMENTO --> Qui inizializzo e apporto modifiche con PropertyChanged, Nel BaseViewModel dichiaro la prop, e nel [View]ViewModel imposto
     }
 }

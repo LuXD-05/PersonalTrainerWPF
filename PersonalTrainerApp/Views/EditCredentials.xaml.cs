@@ -73,13 +73,13 @@ namespace PersonalTrainerApp.Views
                 // Se username e password non sono == a prima
                 if (!((this.DataContext as User).Username == username && (this.DataContext as User).Password == password))
                 {
-                    // Ottengo utenti in db
+                    // Gets users in the db
                     var users = FileManager.GetUsers();
 
                     // Se l'utente non esiste già
                     if (!users.Any(x => x.Username == username))
                     {
-                        // Ottengo l'indice dell'utente in questione nella lista
+                        // Gets the user's index in the list
                         int i = users.IndexOf(users.Single(x => x.Username == (this.DataContext as User).Username && x.Password == (this.DataContext as User).Password));
 
                         // Aggiorno username e password dell'utente (List)

@@ -17,15 +17,7 @@ using System.Windows.Shapes;
 namespace PersonalTrainerApp
 {
     /// <summary>
-    /// Applicazione personal trainer
-    /// 1) Accesso con login (e poi anche logout)
-    /// 2) Home: registrazione percorsi di attività sportive.
-    ///    Home: Visualizzazione attività ordinabili per: tempo impiegato o data esecuz
-    /// 3) Attività: Descrizione, DataInizio, DataFine, Posizione in Latitudine e longitudine (partenza)
-    ///    Attività: Stima calorie consumate dell'attività
-    /// 4) Calendario: mensile (riquadri con colori diversi x attività)
-    /// 5) *: Attività selezionabili (quindi inserire tool per multi edit/delete...)
-    ///    *: Se clicco, si apre il dettaglio con il MapControl + posizione long e lat
+    /// Main window / main ContentControl backend
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -33,9 +25,13 @@ namespace PersonalTrainerApp
         {
             InitializeComponent();
 
+            // Sets the datacontext as a new MainViewModel
             DataContext = new MainViewModel();
         }
 
+        /// <summary>
+        /// Programmatically sets some bindings to the dimensions of the window (seemed to not work in set in the view)
+        /// </summary>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.SetBinding(Window.WidthProperty, new Binding("Width") { Source = DataContext as MainViewModel, Mode = BindingMode.TwoWay });

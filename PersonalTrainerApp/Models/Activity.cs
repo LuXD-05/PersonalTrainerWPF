@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 namespace PersonalTrainerApp.Models
 {
     /// <summary>
-    /// Classe attività
+    /// Class for activity date
     /// </summary>
     [Serializable]
     public class Activity : INotifyPropertyChanged
@@ -18,80 +18,95 @@ namespace PersonalTrainerApp.Models
 
         public enum ActivityType
         {
-            Camminata = 0,
-            Corsa = 1,
-            Bicicletta = 2
+            Wall = 0,
+            Run = 1,
+            Bike = 2
         }
 
-        private string _nome;
-        private string _apiActivityName;    // Vedere come legare a enum
-        private DateTime _data;
+        private string _name;
+        private DateTime _date;
         private Location _coordinate;
-        private double _lunghezza;  // m
-        private double _calorie;    // cal
-        private string _image;      // base64string
+        private double _length;
+        private double _calories;
+        private string _image;
         private bool _done;
-        private ActivityType _tipo;
+        private ActivityType _type;
 
         #endregion
 
         #region Properties
 
-        public string Nome
+        public string Name
         {
-            get { return _nome; }
+            get { return _name; }
             set 
             {
-                if (_nome != value)
+                if (_name != value)
                 {
-                    _nome = value;
-                    OnPropertyChanged(nameof(Nome));
+                    _name = value;
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
-        public string ApiActivityName
+
+        /// <summary>
+        /// Full datetime
+        /// </summary>
+        public DateTime FullDate
         {
-            get { return _apiActivityName; }
+            get { return _date; }
             set 
             { 
-                if (_apiActivityName != value)
+                if (_date != value)
                 {
-                    _apiActivityName = value;
-                    OnPropertyChanged(nameof(ApiActivityName));
-                }
-            }
-        }
-        public DateTime DataFull
-        {
-            get { return _data; }
-            set 
-            { 
-                if (_data != value)
-                {
-                    _data = value;
-                    OnPropertyChanged(nameof(DataFull));
+                    _date = value;
+                    OnPropertyChanged(nameof(FullDate));
                     OnPropertyChanged(nameof(DatePart));
                     OnPropertyChanged(nameof(TimePart));
-                    OnPropertyChanged(nameof(DataOra));
-                    OnPropertyChanged(nameof(Data));
-                    OnPropertyChanged(nameof(Ora));
+                    OnPropertyChanged(nameof(DateTimeString));
+                    OnPropertyChanged(nameof(DateString));
+                    OnPropertyChanged(nameof(TimeString));
                 }
             }
         }
-        public DateTime DatePart => DataFull.Date;
-        public DateTime? TimePart => (DateTime?)DateTime.Today.Add(DataFull.TimeOfDay);
-        public string DataOra
+
+        /// <summary>
+        /// Just the date part of the full date
+        /// </summary>
+        public DateTime DatePart => FullDate.Date;
+
+        /// <summary>
+        /// Just the time part of the full date
+        /// </summary>
+        public DateTime? TimePart => (DateTime?)DateTime.Today.Add(FullDate.TimeOfDay);
+
+        /// <summary>
+        /// Full date in string formatted to "dd/MM/yyyy HH:mm"
+        /// </summary>
+        public string DateTimeString
         {
-            get { return _data.ToString("dd/MM/yyyy HH:mm"); }
+            get { return _date.ToString("dd/MM/yyyy HH:mm"); }
         }
-        public string Data
+
+        /// <summary>
+        /// Full date in string formatted to "dd/MM/yyyy"
+        /// </summary>
+        public string DateString
         {
-            get { return _data.ToString("dd/MM/yyyy"); }
+            get { return _date.ToString("dd/MM/yyyy"); }
         }
-        public string Ora
+
+        /// <summary>
+        /// Full date in string formatted to "HH:mm"
+        /// </summary>
+        public string TimeString
         {
-            get { return _data.ToString("HH:mm"); }
+            get { return _date.ToString("HH:mm"); }
         }
+
+        /// <summary>
+        /// Location object of the MapsUI package
+        /// </summary>
         public Location Coordinate
         {
             get { return _coordinate; }
@@ -104,52 +119,66 @@ namespace PersonalTrainerApp.Models
                 }
             }
         }
-        public double Lunghezza
+
+        public double Length
         {
-            get { return _lunghezza; }
+            get { return _length; }
             set 
             { 
-                if (_lunghezza != value)
+                if (_length != value)
                 {
-                    _lunghezza = value;
-                    OnPropertyChanged(nameof(Lunghezza));
-                    OnPropertyChanged(nameof(LunghezzaString));
+                    _length = value;
+                    OnPropertyChanged(nameof(Length));
+                    OnPropertyChanged(nameof(LengthString));
                 }
             }
         }
-        public string LunghezzaString
+
+        /// <summary>
+        /// Length in string, if (< 1000) in meters else in kilometers
+        /// </summary>
+        public string LengthString
         {
             get 
             {
-                if (_lunghezza < 1000)
-                    return _lunghezza + " m";
+                if (_length < 1000)
+                    return _length + " m";
                 else
-                    return Math.Round(_lunghezza / 1000, 1) + " km";
+                    return Math.Round(_length / 1000, 1) + " km";
             }
         }
-        public double Calorie
+
+        public double Calories
         {
-            get { return _calorie; }
+            get { return _calories; }
             set 
             { 
-                if (_calorie != value)
+                if (_calories != value)
                 {
-                    _calorie = value;
-                    OnPropertyChanged(nameof(Calorie));
-                    OnPropertyChanged(nameof(CalorieString));
+                    _calories = value;
+                    OnPropertyChanged(nameof(Calories));
+                    OnPropertyChanged(nameof(CaloriesString));
                 }
             }
         }
-        public string CalorieString
+
+        /// <summary>
+        /// Calories in string, if (< 1000) cal else kcal
+        /// </summary>
+        public string CaloriesString
         {
             get
             {
-                if (_calorie < 1000)
-                    return _calorie + " cal";
+                if (_calories < 1000)
+                    return _calories + " cal";
                 else
-                    return Math.Round(_calorie / 1000, 1) + " kcal";
+                    return Math.Round(_calories / 1000, 1) + " kcal";
             }
         }
+
+        /// <summary>
+        /// Image in string
+        /// </summary>
         public string Image
         {
             get { return _image; }
@@ -160,19 +189,23 @@ namespace PersonalTrainerApp.Models
                 OnPropertyChanged(nameof(BitmapImage));
             }
         }
+
+        /// <summary>
+        /// Image in GitmapImage
+        /// </summary>
         public BitmapImage BitmapImage
         {
             get
             {
                 byte[] bytes;
 
-                // Se _image da db == "" o null, prendo l'immagine di default, altrimenti prendo quella da db
+                // if (_image from db is null or "") gets default image else gets img from db
                 if (string.IsNullOrEmpty(_image))
                     bytes = Convert.FromBase64String(App.DEFAULT_ACTIVITY);
                 else
                     bytes = Convert.FromBase64String(_image);
 
-                // Ottengo l'immagine tramite un memorystream e la ritorno
+                // Gets the img from a MemoryStream and returns it
                 var bmp = new BitmapImage();
                 bmp.BeginInit();
                 bmp.StreamSource = new MemoryStream(bytes);
@@ -180,6 +213,7 @@ namespace PersonalTrainerApp.Models
                 return bmp;
             }
         }
+
         public bool IsDone
         {
             get { return _done; }
@@ -192,68 +226,66 @@ namespace PersonalTrainerApp.Models
                 }
             }
         }
-        public ActivityType Tipo
+
+        public ActivityType Type
         {
-            get { return _tipo; }
+            get { return _type; }
             set 
             { 
-                if (_tipo != value)
+                if (_type != value)
                 {
-                    _tipo = value;
-                    OnPropertyChanged(nameof(Tipo));
-                    OnPropertyChanged(nameof(TipoString));
-                    OnPropertyChanged(nameof(TipiString));
+                    _type = value;
+                    OnPropertyChanged(nameof(Type));
+                    OnPropertyChanged(nameof(TypeString));
+                    OnPropertyChanged(nameof(TypesListString));
                 }
             }
         }
-        public string TipoString
+
+        /// <summary>
+        /// Activity type in string
+        /// </summary>
+        public string TypeString
         {
-            get { return Enum.GetName(typeof(ActivityType), _tipo); }
+            get { return Enum.GetName(typeof(ActivityType), _type); }
         }
-        public List<string> TipiString
+
+        /// <summary>
+        /// All activity types in string list
+        /// </summary>
+        public List<string> TypesListString
         {
             get { return Enum.GetNames(typeof(ActivityType)).ToList(); }
         }
-        
-        // fare Location
 
         #endregion
 
         #region Constructors
 
-        /// <summary>
-        /// Costruttore vuoto
-        /// </summary>
         public Activity() { }
 
         /// <summary>
-        /// Costruttore parametrizzato full
+        /// Full parametrized constructor
         /// </summary>
-        /// <param name="nome">Nome dell'attività</param>
-        /// <param name="data">Data e ora dell'attività</param>
-        /// <param name="coord">Coordinata (x,y) dell'attività</param>
-        /// <param name="lunghezza">Lunghezza in metri dell'attività</param>
-        /// <param name="calorie">Calorie in calorie (non kilo) dell'attività</param>
-        /// <param name="tipo">Tipo dell'attività (camminata, corsa o bicicletta)</param>
-        /// <param name="done">True se l'attività è completata, altrimenti false</param>
-        public Activity(string nome, DateTime data, Location coord, double lunghezza, double calorie, ActivityType tipo, string img, bool done)
+        /// <param name="name">Name</param>
+        /// <param name="date">Datetime</param>
+        /// <param name="coord">Coordinates (x,y)</param>
+        /// <param name="length">Length in meters</param>
+        /// <param name="calories">Calories in cal</param>
+        /// <param name="type">Activity type (walk, run or bike)</param>
+        /// <param name="done">True if completed</param>
+        public Activity(string name, DateTime date, Location coord, double length, double calories, ActivityType type, string img, bool done)
         {
-            _nome = nome;
-            _data = data;
+            _name = name;
+            _date = date;
             _coordinate = coord;
-            _lunghezza = lunghezza;
-            _calorie = calorie;
+            _length = length;
+            _calories = calories;
             _done = false;
-            _tipo = tipo;
+            _type = type;
             _image = img;
             _done = done;
         }
-
-        #endregion
-
-        #region Methods
-
-
 
         #endregion
 

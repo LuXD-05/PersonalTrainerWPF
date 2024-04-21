@@ -12,9 +12,6 @@ using System.Windows.Media;
 
 namespace PersonalTrainerApp.Views.SubViews
 {
-    /// <summary>
-    /// Logica di interazione per ActivitiesSubView.xaml
-    /// </summary>
     public partial class ActivitiesSubView : UserControl
     {
         private SubWindow _subWindow;
@@ -27,33 +24,33 @@ namespace PersonalTrainerApp.Views.SubViews
         {
             InitializeComponent();
 
-            // Imposto datacontext view a user
+            // Sets the datacontext as the user
             this.DataContext = (Application.Current.MainWindow.DataContext as MainViewModel).User;
 
-            // Imposto datacontext dettaglio a null (x evitare errori binding)
+            // Sets the detail grid datacontext at null (to avoid binding errors)
             gDettaglio.DataContext = null;
 
-            // Setto il checked radiobutton name iniziale
+            // Sets the initial checked radio button name
             _checkedRbtnName = "Todo";
         }
 
         #region Methods
 
         /// <summary>
-        /// Cambia la visualizzazione delle attività
+        /// Changes activities view (render)
         /// </summary>
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            // Se il dettaglio e la subwindow non sono aperti
+            // If detail and subwindow arent opened
             if (!IsDetailOpened && !IsSubWindowOpened)
             {
-                // Controllo se evento mandato da un radiobutton checkato
+                // Checks if the event is sent by a checked radio button
                 if (sender is RadioButton rbtn && rbtn.IsChecked == true && _checkedRbtnName != string.Empty)
                 {
-                    // Salvo il nome del radiobutton checkato
+                    // Saves the checked radio button name
                     _checkedRbtnName = rbtn.Name.Remove(0, 4);
 
-                    // Se ci sono start e end
+                    // If there are start and end
                     if (dpStart.SelectedDate.HasValue && dpEnd.SelectedDate.HasValue && dpStart.SelectedDate <= dpEnd.SelectedDate)
                     {
                         DateTime start = dpStart.SelectedDate.Value;
@@ -63,9 +60,9 @@ namespace PersonalTrainerApp.Views.SubViews
                             lvActivities.ItemsSource = (this.DataContext as User).Activities;
                         else
                         {
-                            // Prendo le attività nel range di date + se fatte o non fatte
+                            // Gets the activities in the date range + if done or not
                             lvActivities.ItemsSource = (this.DataContext as User).Activities
-                                .Where(x => (_checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone) && x.DataFull >= start && x.DataFull < end.AddDays(1));
+                                .Where(x => (_checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone) && x.FullDate >= start && x.FullDate < end.AddDays(1));
                         }
                     }
                     else
@@ -74,7 +71,7 @@ namespace PersonalTrainerApp.Views.SubViews
                             lvActivities.ItemsSource = (this.DataContext as User).Activities;
                         else
                         {
-                            // Prendo le attività se fatte o non fatte
+                            // Gets the activities if done or not
                             lvActivities.ItemsSource = (this.DataContext as User).Activities.Where(x => _checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone);
                         }
                     } 
@@ -83,30 +80,30 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Filtra le attività in base alle date nei datepicker
+        /// Filters the activities based on the names in the datepicker
         /// </summary>
         private void btnFilter_Click(object sender, RoutedEventArgs e)
         {
-            // Se il dettaglio e la subwindow non sono aperti
+            // If detail and subwindow arent opened
             if (!IsDetailOpened && !IsSubWindowOpened)
             {
-                // Se ci sono start e end
+                // If there are start and end
                 if (dpStart.SelectedDate.HasValue && dpEnd.SelectedDate.HasValue)
                 {
                     DateTime start = dpStart.SelectedDate.Value;
                     DateTime end = dpEnd.SelectedDate.Value;
 
-                    // Se data start <= data end
+                    // If startdate <= enddate
                     if (dpStart.SelectedDate <= dpEnd.SelectedDate)
                     {
-                        // Prendo le attività (in base al checkedRadioButtonName) e comprese nel range di date
+                        // Gets the activities (based on the checkedRadioButtonName) And between the date range
                         if (_checkedRbtnName == "All")
                             lvActivities.ItemsSource = (this.DataContext as User).Activities
-                                .Where(x => (_checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone) && x.DataFull >= start && x.DataFull < end.AddDays(1));
+                                .Where(x => (_checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone) && x.FullDate >= start && x.FullDate < end.AddDays(1));
                         else
                         {
                             lvActivities.ItemsSource = (this.DataContext as User).Activities
-                                .Where(x => (_checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone) && x.DataFull >= start && x.DataFull < end.AddDays(1));
+                                .Where(x => (_checkedRbtnName == "Todo" ? !x.IsDone : x.IsDone) && x.FullDate >= start && x.FullDate < end.AddDays(1));
                         }
                     }
                     else
@@ -116,53 +113,53 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Apre la finestra di creazione di un'attività
+        /// Opens the window to create a new activity
         /// </summary>
         private void NewActivity(object sender, RoutedEventArgs e)
         {
-            // Se il dettaglio e la subwindow non sono aperti
+            // If detail and subwindow arent opened
             if (!IsDetailOpened && !IsSubWindowOpened)
             {
-                // Istanzio subwindow con view desiderata e attività
+                // Instances the subwindow with desired view and activity
                 _subWindow = new SubWindow(new NewActivity(this.DataContext as User));
 
-                // Aggiungo handler per quando si chiude la subwindow
+                // Adds handler for when the subwindow closes
                 _subWindow.Closed += SubWindow_Closed;
 
-                // Mostro subwindow
+                // Shows the subwindow
                 _subWindow.Show();
 
-                // Setto variabile subwindow aperta
+                // Sets subwindow variable true
                 IsSubWindowOpened = true;
             }
         }
 
         /// <summary>
-        /// Gestisce la check della checkbox e setta se un'attività è completa o no
+        /// Handles checkbox's check and sets if an activity is completed or not
         /// </summary>
         private void CheckActivity(object sender, RoutedEventArgs e)
         {
-            // Se la subwindow non è aperta
+            // If subwindow isn't opened
             if (!IsSubWindowOpened)
             {
-                // Se evento è generato da checkbox ed è != null
+                // If the event is generated from a checkbox and is != null
                 if (sender != null && sender is CheckBox cb)
                 {
-                    // Provo a ottenere il ListViewItem della cb
+                    // Tries to obtain the ListviewItem of the cb
                     var item = GetAncestorOfType<ListViewItem>(cb);
                     if (item != null && item is ListViewItem)
                     {
-                        // Provo a ottenere l'attività
+                        // Tries to get the activity
                         var activity = item.Content;
                         if (activity != null && activity is Activity a)
                         {
-                            // Ottengo utenti in db
+                            // Gets users in the db
                             var users = FileManager.GetUsers();
 
-                            // Ottengo l'attività in questione dell'utente in questione e le assegno lo stato della checkbox
-                            users.Single(x => x.Username == (this.DataContext as User).Username).Activities.Single(x => x.Nome == a.Nome).IsDone = a.IsDone;
+                            // Gets the the user's activity and assigns to it the checkbox status
+                            users.Single(x => x.Username == (this.DataContext as User).Username).Activities.Single(x => x.Name == a.Name).IsDone = a.IsDone;
 
-                            // Aggiorno db
+                            // Updates db
                             FileManager.UpdateDb(users);
                         }
                     }
@@ -171,136 +168,136 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Apre la finestra di modifica di un'attività
+        /// Opens the activity edit window
         /// </summary>
         private void EditActivity(object sender, RoutedEventArgs e)
         {
-            // Se la subwindow non è aperta
+            // If subwindow isn't opened
             if (!IsSubWindowOpened)
             {
-                // Provo a ottenere il ListViewItem
+                // Tries to get the ListViewItem
                 var item = GetAncestorOfType<ListViewItem>(sender as Button);
                 if (item != null && item is ListViewItem)
                 {
-                    // Provo a ottenere l'attività
+                    // Tries to get the activity
                     var activity = item.Content;
                     if (activity != null && activity is Activity a)
                     {
-                        // Istanzio subwindow con view desiderata e attività
+                        // Instances the subwindow with desired view and activity
                         _subWindow = new SubWindow(new EditActivity(a, this.DataContext as User));
 
-                        // Aggiungo handler per quando si chiude la subwindow
+                        // Adds handler for when the subwindow closes
                         _subWindow.Closed += SubWindow_Closed;
 
-                        // Mostro subwindow
+                        // Shows the subwindow
                         _subWindow.Show();
 
-                        // Setto variabile subwindow aperta
+                        // Sets subwindow variable true
                         IsSubWindowOpened = true;
                     }
                 }
                 else if ((sender as Button).Name == "btnEdit")
                 {
-                    // Istanzio subwindow con view desiderata e attività
+                    // Instances the subwindow with desired view and activity
                     _subWindow = new SubWindow(new EditActivity(gDettaglio.DataContext as Activity, this.DataContext as User));
 
-                    // Aggiungo handler per quando si chiude la subwindow
+                    // Adds handler for when the subwindow closes
                     _subWindow.Closed += SubWindow_Closed;
 
-                    // Mostro subwindow
+                    // Shows the subwindow
                     _subWindow.Show();
 
-                    // Setto variabile subwindow aperta
+                    // Sets subwindow variable true
                     IsSubWindowOpened = true;
                 } 
             }
         }
 
         /// <summary>
-        /// Elimina un'attività
+        /// Deletes an activity
         /// </summary>
         private void DeleteActivity(object sender, RoutedEventArgs e)
         {
-            // Se la subwindow non è aperta
+            // If subwindow isn't opened
             if (!IsSubWindowOpened)
             {
-                // Provo a ottenere il ListViewItem (caso elimina da ListView)
+                // Tries to get the ListViewItem (caso elimina da ListView)
                 var item = GetAncestorOfType<ListViewItem>(sender as Button);
                 if (item != null && item is ListViewItem)
                 {
-                    // Provo a ottenere l'attività
+                    // Tries to get the activity
                     var a = item.Content;
                     if (a != null && a is Activity)
                     {
-                        // Elimino l'attività (Model)
+                        // Deletes activity (Model)
                         (this.DataContext as User).Activities.Remove(a as Activity);
 
-                        // Ottengo gli utenti a db
+                        // Gets the users from db
                         var users = FileManager.GetUsers();
 
-                        // Ottengo l'indice dell'utente in questione nella lista
+                        // Gets the user's index in the list
                         int i = users.IndexOf(users.Single(x => x.Username == (this.DataContext as User).Username));
 
-                        // Elimino l'attività (List)
-                        users[i].Activities.Remove(users[i].Activities.Single(x => x.Nome == (a as Activity).Nome));
+                        // Deletes activity (List)
+                        users[i].Activities.Remove(users[i].Activities.Single(x => x.Name == (a as Activity).Name));
 
-                        // Aggiorno db
+                        // Updates db
                         FileManager.UpdateDb(users);
                     }
                 }
-                // Vedo se cliccato il btnEdit (caso elimina da Dettaglio)
+                // If clicked btnEdit (case delete from Detail)
                 else if ((sender as Button).Name == "btnDelete")
                 {
-                    // Elimino l'attività (Model)
+                    // Deletes activity (Model)
                     (this.DataContext as User).Activities.Remove(gDettaglio.DataContext as Activity);
 
-                    // Ottengo gli utenti a db
+                    // Gets the users from db
                     var users = FileManager.GetUsers();
 
-                    // Ottengo l'indice dell'utente in questione nella lista
+                    // Gets the user's index in the list
                     int i = users.IndexOf(users.Single(x => x.Username == (this.DataContext as User).Username));
 
-                    // Elimino l'attività (List)
-                    users[i].Activities.Remove(users[i].Activities.Single(x => x.Nome == (gDettaglio.DataContext as Activity).Nome));
+                    // Deletes activity (List)
+                    users[i].Activities.Remove(users[i].Activities.Single(x => x.Name == (gDettaglio.DataContext as Activity).Name));
 
-                    // Aggiorno db
+                    // Updates db
                     FileManager.UpdateDb(users);
                 }
 
-                // Chiudo il dettaglio attività
+                // Closes activity detail
                 this.CloseActivityDetail(sender, null);
             }
         }
 
         /// <summary>
-        /// Gestisce l'evento click del selectedItem della ListView aprendo la finestra di dettaglio
+        /// Handles the ListView's selectedItem's click event opening the detail window
         /// </summary>
         private void OpenActivityDetail(object sender, MouseButtonEventArgs e)
         {
-            // Se la subwindow non è aperta
+            // If subwindow isn't opened
             if (!IsSubWindowOpened)
             {
-                // Se ho cliccato su un bottone nell'item invece che sull'item
+                // If item's btn was clicked instead of the item itself
                 if (GetAncestorOfType<Button>(e.OriginalSource as FrameworkElement) != null)
                     return;
 
-                // Controllo se item selezionato e != null
+                // Checks if item is selected and != null
                 var item = sender as ListViewItem;
                 if (item != null && item.IsSelected)
                 {
-                    // Ottengo il contenuto (attività) dell'item se c'è 
+                    // Getse the (activity) content of the item if has content
                     if (item.HasContent && item.Content is Activity a)
                     {
-                        // Imposto datacontext sezione dettaglio all'attività selezionata
+                        // Sets detail section datacontext to the selected activity
                         gDettaglio.DataContext = a;
 
-                        // Imposto location e zoom
+                        // Sets location and zoom
                         SetMap(a.Coordinate);
 
-                        // Apro colonna dettaglio
+                        // Opens detail column
                         cDetail.Width = new GridLength(1, GridUnitType.Star);
 
-                        // Setto variabile dettaglio aperto
+                        // Sets opened detail variable to true
                         IsDetailOpened = true;
                     }
                 } 
@@ -308,57 +305,57 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Chiude la colonna contenente il dettaglio dell'attività selezionata
+        /// Closes the column containing the selected activity detail
         /// </summary>
         public void CloseActivityDetail(object sender, MouseButtonEventArgs e)
         {
-            // Se la subwindow non è aperta
+            // If subwindow isn't opened
             if (!IsSubWindowOpened)
             {
-                // Chiudo colonna dettaglio
+                // Closes detail column
                 cDetail.Width = new GridLength(0);
 
-                // Tolgo il datacontext (risparmio memoria perche non renderizza map?)
+                // Removes the datacontext
                 gDettaglio.DataContext = null;
 
-                // Setto variabile dettaglio chiuso
+                // Sets variable opened detail to false
                 IsDetailOpened = false; 
             }
         }
 
         /// <summary>
-        /// Sorta gli elementi in base all'header cliccato
+        /// Sorts elements based on the clicked header
         /// </summary>
         private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
         {
-            // Ottengo la gridviewcolumn cliccata
+            // Gets the clicked gridviewcolumn
             var gvc = e.OriginalSource as GridViewColumnHeader;
 
-            // Tolgo sort precedenti
+            // Remover old sorts
             lvActivities.Items.SortDescriptions.Clear();
 
-            // Sorto in base al nome di colonna
+            // Sorts based on the column name
             switch (gvc?.Content.ToString())
             {
-                case "Nome":
-                    // Ordina per il nome
-                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Nome", ListSortDirection.Ascending));
+                case "Name":
+                    // Orders by name
+                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                     break;
                 case "Data e ora":
-                    // Ordina per la data e ora
-                    lvActivities.Items.SortDescriptions.Add(new SortDescription("DataOra", ListSortDirection.Ascending));
+                    // Orders by date and time
+                    lvActivities.Items.SortDescriptions.Add(new SortDescription("DateTimeString", ListSortDirection.Ascending));
                     break;
-                case "Lunghezza":
-                    // Ordina per la lunghezza
-                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Lunghezza", ListSortDirection.Ascending));
+                case "Length":
+                    // Orders by length
+                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Length", ListSortDirection.Ascending));
                     break;
-                case "Calorie":
-                    // Ordina per le calorie
-                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Calorie", ListSortDirection.Ascending));
+                case "Calories":
+                    // Orders by calories
+                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Calories", ListSortDirection.Ascending));
                     break;
-                case "Tipo":
-                    // Ordina per il tipo
-                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Tipo", ListSortDirection.Ascending));
+                case "Type":
+                    // Orders by type
+                    lvActivities.Items.SortDescriptions.Add(new SortDescription("Type", ListSortDirection.Ascending));
                     break;
                 default:
                     return;
@@ -370,10 +367,10 @@ namespace PersonalTrainerApp.Views.SubViews
         #region Private Methods
 
         /// <summary>
-        /// Ottiene il parent del controllo specificato (generic)
+        /// Gets the specified control's parent (generic)
         /// </summary>
-        /// <typeparam name="T">Tipo del controllo specificato</typeparam>
-        /// <param name="child">Controllo di cui ottenere il parent</param>
+        /// <typeparam name="T">Specified control's Type</typeparam>
+        /// <param name="child">Control of which obtain the parent</param>
         private T GetAncestorOfType<T>(FrameworkElement child) where T : FrameworkElement
         {
             var parent = VisualTreeHelper.GetParent(child);
@@ -383,28 +380,28 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Metodo che gestisce la chiusura della subwindow, aggiornando i controlli da aggiornare
+        /// Handles subwindow closed, updating things
         /// </summary>
         private void SubWindow_Closed(object sender, EventArgs e)
         {
-            // Rimuovo handler
+            // Removes handler
             _subWindow.Closed -= SubWindow_Closed;
 
-            // Setto variabile subwindow chiusa
+            // Sets variable opened subwindow to false
             IsSubWindowOpened = false;
 
-            // Se datacontext != null e is activity
+            // if datacontext != null && is activity
             if (gDettaglio.DataContext != null && gDettaglio.DataContext is Activity a)
             {
-                // Aggiorno mappa
+                // Updates map
                 SetMap(a.Coordinate);
             }
         }
 
         /// <summary>
-        /// Setta centro, pushpin e zoom della mappa
+        /// Sets center, pushpin and zoom on the map
         /// </summary>
-        /// <param name="l">Punto del pushpin</param>
+        /// <param name="l">Pushpin point</param>
         private void SetMap(Location l)
         {
             mapControl.Children.Clear();

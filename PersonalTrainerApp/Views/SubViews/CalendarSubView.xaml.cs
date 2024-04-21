@@ -1,28 +1,16 @@
 ﻿using PersonalTrainerApp.Models;
 using PersonalTrainerApp.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PersonalTrainerApp.Views.SubViews
 {
-    /// <summary>
-    /// Logica di interazione per CalendarSubView.xaml
-    /// </summary>
     public partial class CalendarSubView : UserControl, INotifyPropertyChanged
     {
         private string _selectedMonth;
@@ -42,34 +30,34 @@ namespace PersonalTrainerApp.Views.SubViews
         {
             InitializeComponent();
 
-            // Imposto datacontext view a user
+            // Sets the datacontext as the user
             DataContext = (Application.Current.MainWindow.DataContext as MainViewModel).User;
 
-            // Inizializzo mese selezionato
+            // Init selected month
             SelectedMonth = calendar.SelectedDate.HasValue ?
                 SelectedMonth = char.ToUpper(calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT"))[0]) + calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT")).Substring(1) : 
                 SelectedMonth = char.ToUpper(DateTime.Now.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT"))[0]) + DateTime.Now.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT")).Substring(1);
-            // Imposto datacontext tbkMonth
+            // Sets datacontext tbkMonth
             tbkMonth.DataContext = this;
 
-            // Inizializzo anni
+            // Init years
             Years = new ObservableCollection<int> { DateTime.Today.Year - 2, DateTime.Today.Year - 1, DateTime.Today.Year, DateTime.Today.Year + 1, DateTime.Today.Year + 2 };
-            // Imposto datacontext stackpanel
+            // Sets datacontext stackpanel
             spYears.DataContext = this;
         }
 
         /// <summary>
-        /// Gestisce l'evento MouseDown del controllo
+        /// Handlws mousedown
         /// </summary>
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
-            // Se cliccato il mouseButton sinistro, esegui il DragMove della MainWindow
+            // If left mouse button clicked, DragMove
             if (e.ChangedButton == MouseButton.Left)
                 Application.Current.MainWindow.DragMove();
         }
 
         /// <summary>
-        /// Gestisce l'evento generato al cambio del mese selezionato
+        /// Handles the event generated when the selected month changes
         /// </summary>
         private void ChangeMonth(object sender, RoutedEventArgs e)
         {
@@ -79,16 +67,16 @@ namespace PersonalTrainerApp.Views.SubViews
                 var m = DateTime.ParseExact(month, "MMM", CultureInfo.GetCultureInfo("it-IT")).Month;
                 var y = calendar.DisplayDate.Year;
 
-                // Imposto la data del calendario visualizzata
+                // Sets the displayed date
                 calendar.DisplayDate = new DateTime(y, m, d);
 
-                // Cambio il mese selezionato se cambia il mese della data selezionata
+                // Changes the selected months if also changes the selected date
                 SelectedMonth = char.ToUpper(calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT"))[0]) + calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT")).Substring(1);
             }
         }
 
         /// <summary>
-        /// Gestisce l'evento generato al cambio dell'anno selezionato
+        /// Handles the event generated when the selected year changes
         /// </summary>
         private void ChangeYear(object sender, RoutedEventArgs e)
         {
@@ -97,13 +85,13 @@ namespace PersonalTrainerApp.Views.SubViews
                 var d = calendar.DisplayDate.Day;
                 var m = calendar.DisplayDate.Month;
 
-                // Imposo la data del calendario visualizzata
+                // Sets the displayed date
                 calendar.DisplayDate = new DateTime(y, m, d);
             }
         }
 
         /// <summary>
-        /// Gestisce lo scorrimento degli anni visualizzati indietro
+        /// Handles the scrolling back of years
         /// </summary>
         private void YearBack(object sender, RoutedEventArgs e)
         {
@@ -112,7 +100,7 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Gestisce lo scorrimento degli anni visualizzati avanti
+        /// Handles the scrolling forward of years
         /// </summary>
         private void YearForward(object sender, RoutedEventArgs e)
         {
@@ -121,40 +109,40 @@ namespace PersonalTrainerApp.Views.SubViews
         }
 
         /// <summary>
-        /// Cambia la source dell'ItemsControl in base a cosa cliccato sul calendar
+        /// Changes the ItemsControl's source based on what clicked on the calendar
         /// </summary>
         private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is System.Windows.Controls.Calendar c && c.SelectedDate.HasValue && this.IsLoaded)
             {
-                // Aggiorno l'ItemsControl con elementi del giorno selezionato
-                icActivities.ItemsSource = new ObservableCollection<Activity>((this.DataContext as User).Activities.Where(x => x.DataFull.Date == c.SelectedDate.Value.Date).OrderBy(x => x.DataFull));
+                // Updates the itemcontrol with elements from the selected day
+                icActivities.ItemsSource = new ObservableCollection<Activity>((this.DataContext as User).Activities.Where(x => x.FullDate.Date == c.SelectedDate.Value.Date).OrderBy(x => x.FullDate));
 
-                // Cambio il mese selezionato se cambia il mese della data selezionata
+                // Changes the selectedmonth if the selecteddate's month changes
                 SelectedMonth = char.ToUpper(calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT"))[0]) + calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT")).Substring(1);
             }
         }
 
         /// <summary>
-        /// Cambia il mese in base alla data mostrata
+        /// Changes the month based on the displayed date
         /// </summary>
         private void calendar_DisplayDateChanged(object sender, CalendarDateChangedEventArgs e)
         {
-            // Cambio il mese selezionato se cambia il mese della data selezionata
+            // Changes the selectedmonth if the selecteddate's month changes
             if (calendar.SelectedDate.HasValue)
                 SelectedMonth = char.ToUpper(calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT"))[0]) + calendar.DisplayDate.ToString("MMMM", CultureInfo.GetCultureInfo("it-IT")).Substring(1);
         }
 
         /// <summary>
-        /// Aggiorna l'ItemsControl attività quando la view è caricata
+        /// Updates the ItemsControl's activity when the view is loaded
         /// </summary>
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            // Se il calendar ha un valore selezionato
+            // If calendar has a value selected
             if (calendar.SelectedDate.HasValue)
             {
-                // Aggiorno l'ItemsControl con elementi del giorno selezionato
-                icActivities.ItemsSource = new ObservableCollection<Activity>((this.DataContext as User).Activities.Where(x => x.DataFull.Date == calendar.SelectedDate.Value.Date).OrderBy(x => x.DataFull));
+                // Updates the itemcontrol with elements from the selected day
+                icActivities.ItemsSource = new ObservableCollection<Activity>((this.DataContext as User).Activities.Where(x => x.FullDate.Date == calendar.SelectedDate.Value.Date).OrderBy(x => x.FullDate));
             }
         }
 

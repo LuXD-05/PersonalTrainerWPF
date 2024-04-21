@@ -71,7 +71,7 @@ namespace PersonalTrainerApp.Views
         /// </summary>
         private void DragWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // Se cliccato il mouseButton sinistro, esegui il DragMove della MainWindow
+            // If left mouse button clicked, DragMove
             if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
                 Application.Current.MainWindow.DragMove();
         }
