@@ -30,6 +30,9 @@ namespace PersonalTrainerApp.Views.SubViews
             // Sets the detail grid datacontext at null (to avoid binding errors)
             gDettaglio.DataContext = null;
 
+            // Closes the activity detail
+            CloseActivityDetail(null, null);
+
             // Sets the initial checked radio button name
             _checkedRbtnName = "Todo";
         }

@@ -18,11 +18,11 @@
 
             <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"
-                    Text="{Binding Nome}" FontWeight="DemiBold" TextWrapping="Wrap"/>
+                    Text="{Binding Name}" FontWeight="DemiBold" TextWrapping="Wrap"/>
             </ScrollViewer>
 
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="44" 
-                Text="{Binding Ora}" Margin="0,0,0,4" Grid.Row="1"/>
+                Text="{Binding TimeString}" Margin="0,0,0,4" Grid.Row="1"/>
 
             <Border Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="2,0,0,0" Padding="4,2">
                 <Grid>

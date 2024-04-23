@@ -18,12 +18,12 @@
 
             <TextBlock FontSize="24" Foreground="{StaticResource Fore}" 
                 HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold" 
-                Text="{Binding Nome}"/>
+                Text="{Binding Name}"/>
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="1">
                 <TextBlock FontSize="16" Foreground="{StaticResource Fore}" 
-                    VerticalAlignment="Center" Margin="5,0" Text="{Binding Data}"/>
+                    VerticalAlignment="Center" Margin="5,0" Text="{Binding DateString}"/>
                 <TextBlock FontSize="16" Foreground="{StaticResource Fore}" 
-                    VerticalAlignment="Center" Margin="5,0" Text="{Binding Ora}"/>
+                    VerticalAlignment="Center" Margin="5,0" Text="{Binding TimeString}"/>
             </StackPanel>
 
             <Image Grid.Row="2" Source="{Binding BitmapImage}"/>
