@@ -17,10 +17,6 @@ namespace PersonalTrainerApp
 {
     public partial class SubWindow : Window
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="view"></param>
         public SubWindow(UserControl view)
         {
             InitializeComponent();
