@@ -18,9 +18,9 @@ namespace PersonalTrainerApp.Models
 
         public enum ActivityType
         {
-            Wall = 0,
-            Run = 1,
-            Bike = 2
+            Camminata = 0,  // Walk
+            Corsa = 1,      // Run
+            Bicicletta = 2  // Bike
         }
 
         private string _name;
