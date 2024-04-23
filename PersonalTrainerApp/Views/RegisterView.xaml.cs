@@ -7,49 +7,46 @@ using System.Linq;
 
 namespace PersonalTrainerApp.Views
 {
-    /// <summary>
-    /// View finestra di register
-    /// </summary>
     public partial class RegisterView : UserControl
     {
         public RegisterView()
         {
             InitializeComponent();
 
-            // Imposto il DataContext al DataContext della MainWindow
+            // Sets the datacontext to the mainwindow's datacontext
             DataContext = Application.Current.MainWindow.DataContext;
         }
 
         /// <summary>
-        /// Tenta di registrare l'utente se non registrato
+        /// Tries to register the user if it isn't already
         /// </summary>
         private void btnRegister_Click(object sender, RoutedEventArgs e)
         {
-            // Ottengo l'utente registrato
+            // Gets the registerd user
             var user = new User(tbUsername.Text, pbPassword.Password);
 
-            // Ottengo gli utenti registrati
+            // Gets the registered users
             var users = FileManager.GetUsers();
 
-            // Se l'utente non è registrato (se il suo username non c'è)
+            // If the user isn't registered
             if (!users.Any(x => x.Username == user.Username))
             {
-                // Aggiungo l'utente alla lista
+                // Adds the user to the list
                 users.Add(user);
 
-                // Riaggiungo gli utenti aggiornati a database
+                // Updates the db
                 FileManager.UpdateDb(users);
 
-                // Setto l'utente nel datacontext
+                // Sets the user in the datacontext
                 (this.DataContext as MainViewModel).User = user;
 
-                // Se posso cambiare la view, la cambio con Home
+                // If the view can be changed, changes it with Home
                 if ((this.DataContext as MainViewModel).UpdateViewCommand.CanExecute("Home"))
                     (this.DataContext as MainViewModel).UpdateViewCommand.Execute("Home");
             }
             else
             {
-                // Utente già presente
+                // User already registered
                 (this.DataContext as LoginViewModel).Error = "Utente già registrato";
             }
         }
@@ -67,7 +64,7 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Gestisce l'evento MouseDown del controllo
+        /// Handles the MouseDown event
         /// </summary>
         private void DragWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -77,7 +74,7 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chude l'applicazione
+        /// Closes the application
         /// </summary>
         private void Image_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

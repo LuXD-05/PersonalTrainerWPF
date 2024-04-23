@@ -5,47 +5,44 @@ using System.Windows.Controls;
 
 namespace PersonalTrainerApp.Views
 {
-    /// <summary>
-    /// Logica di interazione per HomeView.xaml
-    /// </summary>
     public partial class HomeView : UserControl
     {
         public HomeView()
         {
             InitializeComponent();
 
-            // Imposto il datacontext a quello della mainwindow
+            // Sets the datacontext to the mainwindow's
             DataContext = Application.Current.MainWindow.DataContext;
         }
 
         /// <summary>
-        /// Gestisce l'evento Checked dei vari MenuRadioButtons
+        /// Handles the checked event of the radio buttons
         /// </summary>
         private void MenuRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            // Se evento chiamato dal radiobutton
+            // If the event is called by the radio button
             if (sender is RadioButton rbtn)
             {
-                // Chiudo il detail se la subview aperta è Activities e ne apro una diversa
+                // Closes the detail if the opened sibview is Activities and opens another one
                 if (((this.DataContext as MainViewModel).SelectedViewModel as HomeViewModel).SelectedSubView is ActivitiesSubView && rbtn.Name != "btnActivities")
                     (((this.DataContext as MainViewModel).SelectedViewModel as HomeViewModel).SelectedSubView as ActivitiesSubView).CloseActivityDetail(sender, null);
                 
-                // Chiamo l'evento per cambiare subvierw
+                // Calls the event to change subview
                 ((this.DataContext as MainViewModel).SelectedViewModel as HomeViewModel).RadioButtonChanged(sender, e);
             }
         }
 
         /// <summary>
-        /// Gestisce l'evento di caricamento della view
+        /// Handles the view's loading event
         /// </summary>
         private void HomeView_Loaded(object sender, RoutedEventArgs e)
         {
-            // Checko il radio button Home per caricare la partial di default
+            // Checks the Home's radio button to load the default partial
             btnHome.IsChecked = true;
         }
 
         /// <summary>
-        /// Gestisce l'evento MouseDown del controllo
+        /// Handles the MouseDown event
         /// </summary>
         private void DragWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

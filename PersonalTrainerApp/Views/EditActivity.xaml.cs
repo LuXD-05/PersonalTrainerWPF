@@ -30,25 +30,25 @@ namespace PersonalTrainerApp.Views
         {
             InitializeComponent();
 
-            // Imposto il datacontext della window all'attività scelta
+            // Sets the window's datacontext to the chosen activity
             this.DataContext = a;
 
-            // Prendo il nome vecchio
+            // Gets the old activity's name
             oldName = a.Name;
 
-            // Salvo l'utente in una variabile locale per modificarlo poi nel caso (funge come se si passasse by ref)
+            // Saves the user in a local variable to edit it in case (functions as it was passed by ref)
             this.u = u;
         }
 
         /// <summary>
-        /// Gestisce l'evento MouseDown del controllo
+        /// Handles the MouseDown event
         /// </summary>
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
-            // Se cliccato il mouseButton sinistro, esegui il DragMove della Window
+            // If the left mouse button is clicked, DragMove the window
             if (e.ChangedButton == MouseButton.Left)
             {
-                // Provo a ottenere la window e la muovo se != null
+                // Tries to get the window and moves it if != null
                 var w = Window.GetWindow(this);
                 if (w != null)
                     w.DragMove();
@@ -56,14 +56,14 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chiude la finestra salvando
+        /// Closes the window and saves
         /// </summary>
         private void SaveAndCloseSubWindow(object sender, RoutedEventArgs e)
         {
-            // Pongo l'error a ""
+            // Resets the error
             string error = "";
 
-            // Prendo campi trimmati
+            // Gets the trimmed fields
             string name = tbName.Text.Trim();
             double? cx = dudX.Value;
             double? cy = dudY.Value;
@@ -74,14 +74,14 @@ namespace PersonalTrainerApp.Views
             string img = ImgToBase64(imgActivity.Source);
             bool done = cbDone.IsChecked.GetValueOrDefault();
 
-            // Se campi sono tutti pieni (e length e calories e x e y sono dei double validi)
+            // If the fields are all valid and != null
             if (!string.IsNullOrEmpty(name) && cx != null && cy != null && !string.IsNullOrEmpty(length) && !string.IsNullOrEmpty(cal) && !string.IsNullOrEmpty(t) &&
                 !string.IsNullOrEmpty(fullDate.ToString("dd/MM/yyyy")) && !string.IsNullOrEmpty(fullDate.ToString("HH/mm/ss")) && !string.IsNullOrEmpty(img))
             {
-                // Se lunghezza e calorie sono dei double validi
+                // If length and calories are valid doubles
                 if (double.TryParse(length.Replace('.', ','), out double dLength) && double.TryParse(cal.Replace('.', ','), out double dCal))
                 {
-                    // Se il tipo corrisponde a un valore di enum ActivityType
+                    // If the type corresponds to an ActivityType enum value
                     if (Enum.TryParse(t, true, out Activity.ActivityType type))
                     {
                         // Gets users in the db
@@ -90,13 +90,13 @@ namespace PersonalTrainerApp.Views
                         // Gets the user's index in the list
                         int i = users.IndexOf(users.Single(x => x.Username == u.Username));
 
-                        // Ottengo l'indice dell'attività in questione nella lista
+                        // Gets the index of the activity in the list
                         var j = users[i].Activities.IndexOf(users[i].Activities.Single(x => x.Name == oldName));
 
-                        // Se il nome non è == a quello di un'altra attività (eccetto quella vecchia)
+                        // If Activities doesn't contain the activity name (except for the old one)
                         if (!users[i].Activities.Where(x => x != users[i].Activities[j]).Any(x => x.Name == name))
                         {
-                            // Aggiorno attributi attività (List)
+                            // Updates activity's attributes (List)
                             users[i].Activities[j].Name = name;
                             users[i].Activities[j].Coordinate = new Location((double)cy, (double)cx);
                             users[i].Activities[j].Length = dLength;
@@ -106,7 +106,7 @@ namespace PersonalTrainerApp.Views
                             users[i].Activities[j].Image = img;
                             users[i].Activities[j].IsDone = done;
 
-                            // Aggiorno attributi attività (Model)
+                            // Updates activity's attributes (Model)
                             (this.DataContext as Activity).Name = name;
                             (this.DataContext as Activity).Coordinate = new Location((double)cy, (double)cx);
                             (this.DataContext as Activity).Length = dLength;
@@ -116,7 +116,7 @@ namespace PersonalTrainerApp.Views
                             (this.DataContext as Activity).Image = img;
                             (this.DataContext as Activity).IsDone = done;
 
-                            // Aggiorno il database
+                            // Updates the db
                             FileManager.UpdateDb(users);
                         }
                         else
@@ -131,7 +131,7 @@ namespace PersonalTrainerApp.Views
             else
                 error = "Nessun campo può essere vuoto.";
 
-            // Se non c'è errore, chiudo la finestra, altrimenti lo mostro
+            // If no error, closes window, else shows it
             if (error == "")
                 CloseSubWindow(sender, null);
             else
@@ -139,55 +139,54 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chiude la finestra senza salvare
+        /// Closes the window without saving
         /// </summary>
         private void CloseSubWindow(object sender, MouseButtonEventArgs e)
         {
-            // Ottengo la window in cui si trova la view
+            // Gets the window where the view is located
             var w = Window.GetWindow(this);
 
-            // Se != null chiudo la window
             if (w != null)
                 w.Close();
         }
 
         /// <summary>
-        /// Apre l'ofd e sceglie l'immagine dell'attività
+        /// Opens an OpenFileDialog and selects the activity's image
         /// </summary>
         private void ChooseImage(object sender, RoutedEventArgs e)
         {
-            // Inizializzo l'ofd con i filtri per immagine
+            // Inits the OpenFileDialog with the img filters
             var ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
 
-            // Se accetto e prendo un'immagine, la imposto
+            // If accepts and gets the image, sets it
             if (ofd.ShowDialog() == true)
                 imgActivity.Source = new BitmapImage(new Uri(ofd.FileName, UriKind.RelativeOrAbsolute));
         }
 
         /// <summary>
-        /// Converte un'immagine ImageSource a stringbase64
+        /// Converts an image to ImageSource to base64
         /// </summary>
-        /// <param name="img">ImageSource da convertire</param>
-        /// <returns>Stringa in base 64 rappresentante l'immagine</returns>
+        /// <param name="img">ImageSource to convert</param>
+        /// <returns>Base64 string representing the image</returns>
         private string ImgToBase64(ImageSource img)
         {
-            // Se l'ImageSource passata è una Bitmapimage
+            // If the ImageSource is a BitmapImage
             if (img != null && img is BitmapImage bmp)
             {
-                // Prendo il suo uri
+                // Gets the URI
                 Uri uri = bmp.UriSource;
 
-                // Se l'uri è trovato (esiste)
+                // If the URI exists
                 if (uri != null)
                 {
-                    // Ottengo il path dell'immagine
+                    // Gets the image path
                     return Convert.ToBase64String(File.ReadAllBytes(uri.LocalPath));
                 }
-                // Se l'uri non esiste (foto già diversa da default, non ne vede l'uri)
+                // If the URI doesn't exist
                 else
                 {
-                    // Leggo la source con memorystream e la ritorno convertita in base 64 string
+                    // Reads the source with a memorystream and returns it in base64
                     var encoder = new PngBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create((BitmapSource)img));
                     using (var ms = new MemoryStream())
@@ -198,7 +197,7 @@ namespace PersonalTrainerApp.Views
                 }
             }
 
-            // Immagine attività default se l'immagine non c'è
+            // Returns the default activity image
             return App.DEFAULT_ACTIVITY;
         }
     }

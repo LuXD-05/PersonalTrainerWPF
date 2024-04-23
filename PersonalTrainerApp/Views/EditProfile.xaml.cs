@@ -22,14 +22,14 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Gestisce l'evento MouseDown del controllo
+        /// Handles the MouseDown event
         /// </summary>
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
-            // Se cliccato il mouseButton sinistro, esegui il DragMove della Window
+            // If the left mouse button is clicked, DragMove the window
             if (e.ChangedButton == MouseButton.Left)
             {
-                // Provo a ottenere la window e la muovo se != null
+                // Tries to get the window and moves it if != null
                 var w = Window.GetWindow(this);
                 if (w != null)
                     w.DragMove();
@@ -37,20 +37,20 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chiude la finestra salvando
+        /// Closes the window and saves
         /// </summary>
         private void SaveAndCloseSubWindow(object sender, RoutedEventArgs e)
         {
-            // Pongo l'error a ""
+            // Resets the error
             string error = "";
 
-            // Prendo valori campi
+            // Gets fields values
             DateTime? birthdate = dpBirthDate.SelectedDate;
             double? height = dudHeight.Value;
             double? weight = dudWeight.Value;
             string img = ImgToBase64(imgProfile.Source);
 
-            // Se campi non sono vuoti o null
+            // If fields != null/empty
             if (birthdate != null && height != null && weight != null && !string.IsNullOrEmpty(img))
             {
                 // Gets users in the db
@@ -59,25 +59,25 @@ namespace PersonalTrainerApp.Views
                 // Gets the user's index in the list
                 int i = users.IndexOf(users.Single(x => x.Username == (this.DataContext as User).Username));
 
-                // Aggiorno attributi dell'utente (List)
+                // Updates the user's attributes (List)
                 users[i].BirthDate = (DateTime)birthdate;
                 users[i].Height = (double)height;
                 users[i].Weight = (double)weight;
                 users[i].Image = img;
 
-                // Aggiorno attributi dell'utente (Model)
+                // Updates the user's attributes (Model)
                 (this.DataContext as User).BirthDate = (DateTime)birthdate;
                 (this.DataContext as User).Height = (double)height;
                 (this.DataContext as User).Weight = (double)weight;
                 (this.DataContext as User).Image = img;
 
-                // Aggiorno il database
+                // Updates the db
                 FileManager.UpdateDb(users);
             }
             else
                 error = "Non possono esserci campi vuoti o invalidi.";
 
-            // Se non c'è errore, chiudo la finestra, altrimenti lo mostro
+            // If no error, closes window, else shows it
             if (error == "")
                 CloseSubWindow(sender, null);
             else
@@ -85,11 +85,11 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chiude la finestra senza salvare
+        /// Closes the window without saving
         /// </summary>
         private void CloseSubWindow(object sender, MouseButtonEventArgs e)
         {
-            // Ottengo la window in cui si trova la view
+            // Gets the window where the view is located
             var w = Window.GetWindow(this);
 
             // Se != null chiudo la window
@@ -102,38 +102,38 @@ namespace PersonalTrainerApp.Views
         /// </summary>
         private void EditImage(object sender, RoutedEventArgs e)
         {
-            // Inizializzo l'ofd con i filtri per immagine
+            // Inits the OpenFileDialog with the img filters
             var ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
 
-            // Se accetto e prendo un'immagine, la imposto
+            // If accepts and gets the image, sets it
             if (ofd.ShowDialog() == true)
                 imgProfile.Source = new BitmapImage(new Uri(ofd.FileName, UriKind.RelativeOrAbsolute));
         }
 
         /// <summary>
-        /// Converte un'immagine ImageSource a stringbase64
+        /// Converts an image to ImageSource to base64
         /// </summary>
-        /// <param name="img">ImageSource da convertire</param>
-        /// <returns>Stringa in base 64 rappresentante l'immagine</returns>
+        /// <param name="img">ImageSource to convert</param>
+        /// <returns>Base64 string representing the image</returns>
         private string ImgToBase64(ImageSource img)
         {
-            // Se l'ImageSource passata è una Bitmapimage
+            // If the ImageSource is a BitmapImage
             if (img != null && img is BitmapImage bmp)
             {
-                // Prendo il suo uri
+                // Gets the URI
                 Uri uri = bmp.UriSource;
 
-                // Se l'uri è trovato (esiste)
+                // If the URI exists
                 if (uri != null)
                 {
-                    // Ottengo il path dell'immagine
+                    // Gets the image path
                     return Convert.ToBase64String(File.ReadAllBytes(uri.LocalPath));
                 }
-                // Se l'uri non esiste (foto già diversa da default, non ne vede l'uri)
+                // If the URI doesn't exist
                 else
                 {
-                    // Leggo la source con memorystream e la ritorno convertita in base 64 string
+                    // Reads the source with a memorystream and returns it in base64
                     var encoder = new PngBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create((BitmapSource)img));
                     using (var ms = new MemoryStream())
@@ -144,7 +144,7 @@ namespace PersonalTrainerApp.Views
                 }
             }
 
-            // Immagine attività default se l'immagine non c'è
+            // Returns the default activity image
             return App.DEFAULT_ACTIVITY;
         }
     }

@@ -18,28 +18,25 @@ using System.Windows.Shapes;
 
 namespace PersonalTrainerApp.Views
 {
-    /// <summary>
-    /// Logica di interazione per EditCredentials.xaml
-    /// </summary>
     public partial class EditCredentials : UserControl
     {
         public EditCredentials(User u)
         {
             InitializeComponent();
 
-            // Imposto il datacontext della view all'utente
+            // Sets the view's datacontext to the user
             this.DataContext = u;
         }
 
         /// <summary>
-        /// Gestisce l'evento MouseDown del controllo
+        /// Handles the MouseDown event
         /// </summary>
         private void DragWindow(object sender, MouseButtonEventArgs e)
         {
-            // Se cliccato il mouseButton sinistro, esegui il DragMove della Window
+            // If the left mouse button is clicked, DragMove the window
             if (e.ChangedButton == MouseButton.Left)
             {
-                // Provo a ottenere la window e la muovo se != null
+                // Tries to get the window and moves it if != null
                 var w = Window.GetWindow(this);
                 if (w != null)
                     w.DragMove();
@@ -47,7 +44,7 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Carica username e password da modificare nelle textboxes
+        /// Loads usr and pwd to edit in the textboxes
         /// </summary>
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -56,21 +53,21 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chiude la finestra salvando
+        /// Closes the window and saves
         /// </summary>
         private void SaveAndCloseSubWindow(object sender, RoutedEventArgs e)
         {
-            // Pongo l'error a ""
+            // Resets the error
             string error = "";
 
-            // Prendo username e password trimmati
+            // Gets usr and pwd trimmed
             var username = tbUsername.Text.Trim();
             var password = pbPassword.Password.Trim();
 
-            // Se username e password non sono vuoti
+            // If usr and pwd != null/empty
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                // Se username e password non sono == a prima
+                // If usr and pwd != old ones
                 if (!((this.DataContext as User).Username == username && (this.DataContext as User).Password == password))
                 {
                     // Gets users in the db
@@ -82,15 +79,15 @@ namespace PersonalTrainerApp.Views
                         // Gets the user's index in the list
                         int i = users.IndexOf(users.Single(x => x.Username == (this.DataContext as User).Username && x.Password == (this.DataContext as User).Password));
 
-                        // Aggiorno username e password dell'utente (List)
+                        // Updates the user's usr and pwd (List)
                         users[i].Username = username;
                         users[i].Password = password;
 
-                        // Aggiorno username e password dell'utente (Model)
+                        // Updates the user's usr and pwd (Model)
                         (this.DataContext as User).Username = username;
                         (this.DataContext as User).Password = password;
 
-                        // Aggiorno il database
+                        // Updates the db
                         FileManager.UpdateDb(users);
                     }
                     else
@@ -102,7 +99,7 @@ namespace PersonalTrainerApp.Views
             else
                 error = "Username e password non possono essere vuoti.";
 
-            // Se non c'è errore, chiudo la finestra, altrimenti lo mostro
+            // If no error, closes window, else shows it
             if (error == "")
                 CloseSubWindow(sender, null);
             else
@@ -110,14 +107,13 @@ namespace PersonalTrainerApp.Views
         }
 
         /// <summary>
-        /// Chiude la finestra senza salvare
+        /// Closes the window without saving
         /// </summary>
         private void CloseSubWindow(object sender, MouseButtonEventArgs e)
         {
-            // Ottengo la window in cui si trova la view
+            // Gets the window where the view is located
             var w = Window.GetWindow(this);
 
-            // Se != null chiudo la window
             if (w != null)
                 w.Close();
         }
