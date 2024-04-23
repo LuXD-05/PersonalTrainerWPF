@@ -123,25 +123,25 @@
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="Views\EditActivity.xaml.cs">
+    <Compile Include="Views\Secondary\EditActivity.xaml.cs">
       <DependentUpon>EditActivity.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditCredentials.xaml.cs">
+    <Compile Include="Views\Secondary\EditCredentials.xaml.cs">
       <DependentUpon>EditCredentials.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditProfile.xaml.cs">
+    <Compile Include="Views\Secondary\EditProfile.xaml.cs">
       <DependentUpon>EditProfile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\HomeView.xaml.cs">
+    <Compile Include="Views\Main\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewActivity.xaml.cs">
+    <Compile Include="Views\Secondary\NewActivity.xaml.cs">
       <DependentUpon>NewActivity.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RegisterView.xaml.cs">
+    <Compile Include="Views\Main\RegisterView.xaml.cs">
       <DependentUpon>RegisterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LoginView.xaml.cs">
+    <Compile Include="Views\Main\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubViews\ActivitiesSubView.xaml.cs">
@@ -219,31 +219,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditActivity.xaml">
+    <Page Include="Views\Secondary\EditActivity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditCredentials.xaml">
+    <Page Include="Views\Secondary\EditCredentials.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditProfile.xaml">
+    <Page Include="Views\Secondary\EditProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HomeView.xaml">
+    <Page Include="Views\Main\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NewActivity.xaml">
+    <Page Include="Views\Secondary\NewActivity.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RegisterView.xaml">
+    <Page Include="Views\Main\RegisterView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LoginView.xaml">
+    <Page Include="Views\Main\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

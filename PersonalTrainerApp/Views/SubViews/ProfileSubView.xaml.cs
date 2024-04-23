@@ -17,7 +17,6 @@ namespace PersonalTrainerApp.Views.SubViews
         public ProfileSubView()
         {
             InitializeComponent();
-
             DataContext = (Application.Current.MainWindow.DataContext as MainViewModel).User;
         }
 

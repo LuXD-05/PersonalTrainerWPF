@@ -129,7 +129,7 @@
                 <Image Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="1"
                     Source="/Resources/Icons/x.png" MouseDown="CloseActivityDetail" Margin="-10,-10,0,0"/>
 
-                <TextBlock VerticalAlignment="Center" Margin="0,3" FontSize="24" FontWeight="DemiBold" Foreground="{StaticResource Fore}" Text="{Binding Nome}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0,3" FontSize="24" FontWeight="DemiBold" Foreground="{StaticResource Fore}" Text="{Binding Name}"/>
 
                 <StackPanel Grid.Row="1" >
                     <TextBlock FontSize="16" Text="Lunghezza"/>
