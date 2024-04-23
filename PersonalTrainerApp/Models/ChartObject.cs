@@ -192,7 +192,8 @@ namespace PersonalTrainerApp.Models
             var sc = new SeriesCollection();
             var l = new ObservableCollection<string>();
 
-            if (u.Activities.Count == 0)
+            // If there arent done activities
+            if (u.Activities.Where(x => x.IsDone).Count() == 0)
                 return;
 
             // Groups activities by day
