@@ -67,15 +67,15 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Width="200" DisplayMemberBinding="{Binding Nome}" Header="Nome"/>
+                    <GridViewColumn Width="200" DisplayMemberBinding="{Binding Name}" Header="Nome"/>
 
-                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding DataOra}" Header="Data e ora"/>
+                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding DateTimeString}" Header="Data e ora"/>
 
-                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding LunghezzaString}" Header="Lunghezza"/>
+                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding LengthString}" Header="Lunghezza"/>
 
-                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding CalorieString}" Header="Calorie"/>
+                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding CaloriesString}" Header="Calorie"/>
 
-                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding TipoString}" Header="Tipo"/>
+                    <GridViewColumn Width="125" DisplayMemberBinding="{Binding TypeString}" Header="Tipo"/>
 
                     <GridViewColumn Width="60" Header="Modifica">
                         <GridViewColumn.CellTemplate>
@@ -133,25 +133,25 @@
 
                 <StackPanel Grid.Row="1" >
                     <TextBlock FontSize="16" Text="Lunghezza"/>
-                    <TextBlock FontSize="20" Foreground="{StaticResource Fore}" Text="{Binding LunghezzaString}"/>
+                    <TextBlock FontSize="20" Foreground="{StaticResource Fore}" Text="{Binding LengthString}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" >
                     <TextBlock FontSize="16" Text="Calorie"/>
-                    <TextBlock FontSize="20" Foreground="{StaticResource Fore}" Text="{Binding CalorieString}"/>
+                    <TextBlock FontSize="20" Foreground="{StaticResource Fore}" Text="{Binding CaloriesString}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3">
                     <TextBlock FontSize="16" Text="Tipo attività"/>
-                    <TextBlock FontSize="20" Foreground="{StaticResource Fore}" Text="{Binding TipoString}"/>
+                    <TextBlock FontSize="20" Foreground="{StaticResource Fore}" Text="{Binding TypeString}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Grid.Column="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Data e ora"/>
                     <TextBlock FontSize="22" Foreground="{StaticResource Fore}" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                        Text="{Binding Data}" />
+                        Text="{Binding DateString}" />
                     <TextBlock FontSize="22" Foreground="{StaticResource Fore}" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                        Text="{Binding Ora}"/>
+                        Text="{Binding TimeString}"/>
                 </StackPanel>
 
                 <Border BorderThickness="5" BorderBrush="{StaticResource Back}" Grid.Column="1" Grid.Row="2" Grid.RowSpan="3" VerticalAlignment="Center">

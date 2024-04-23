@@ -37,7 +37,7 @@
                 <StackPanel Margin="0,3">
                     <TextBlock FontSize="16" HorizontalAlignment="Left" Text="Nome"/>
                     <TextBox Name="tbName" FontSize="18" Foreground="{StaticResource Fore}" Width="260" HorizontalAlignment="Left" 
-                        MaxLength="20" Text="{Binding Nome, Mode=OneTime}"/>
+                        MaxLength="20" Text="{Binding Name, Mode=OneTime}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="1">
@@ -55,19 +55,19 @@
                 <StackPanel Grid.Row="2" Grid.ColumnSpan="1">
                     <TextBlock FontSize="16" Text="Lunghezza (m)"/>
                     <TextBox Name="tbLength" FontSize="18" Foreground="{StaticResource Fore}" Width="260" HorizontalAlignment="Left" 
-                        Text="{Binding Lunghezza, Mode=OneTime}"/>
+                        Text="{Binding Length, Mode=OneTime}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="1">
                     <TextBlock FontSize="16" Text="Calorie (cal)"/>
                     <TextBox Name="tbCalories" FontSize="18" Foreground="{StaticResource Fore}" Width="260" HorizontalAlignment="Left" 
-                        Text="{Binding Calorie, Mode=OneTime}"/>
+                        Text="{Binding Calories, Mode=OneTime}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="4">
                     <TextBlock FontSize="16" VerticalAlignment="Center" Text="Tipo attività"/>
-                    <ComboBox ItemsSource="{Binding TipiString, Mode=OneTime}" FontSize="17" Width="260" HorizontalAlignment="Left"
-                        Name="cbbType" SelectedItem="{Binding TipoString, Mode=OneTime}"/>
+                    <ComboBox ItemsSource="{Binding TypesString, Mode=OneTime}" FontSize="17" Width="260" HorizontalAlignment="Left"
+                        Name="cbbType" SelectedItem="{Binding TypeString, Mode=OneTime}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="5" Orientation="Horizontal">
@@ -75,26 +75,12 @@
                     <CheckBox IsChecked="{Binding IsDone, Mode=OneTime}" Margin="8,4,8,0" Name="cbDone"/>
                 </StackPanel>
 
-                <!-- coordinate mappa -->
-                
                 <StackPanel Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-20,0,0">
                     <TextBlock Grid.Column="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Data e ora"/>
                     <DatePicker Margin="5" FontSize="18" Foreground="{StaticResource Fore}" VerticalAlignment="Center" 
                         DisplayDate="{Binding DatePart, Mode=OneTime}" SelectedDate="{Binding DatePart, Mode=OneTime}" Name="dpDate"/>
                     <wpfext:TimePicker Margin="5" FontSize="19" Foreground="{StaticResource Fore}" VerticalAlignment="Center" Format="Custom" 
                         FormatString="HH:mm" Value="{Binding TimePart, Mode=OneTime}" Name="tpTime"/>
-                    <!-- 
-                    NON BINDA
-                    
-                    DOPO: 
-                    fare in modo che il delete salva in db
-                    vedere roba in activities (detail stile + binding, filtri)
-                    vedere roba in stats (filtri)
-                    sistemare stile home
-                    fare calendar
-                    mappa
-                    dakmode
-                    -->
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-20,0,0">

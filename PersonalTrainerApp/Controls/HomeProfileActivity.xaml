@@ -31,10 +31,10 @@
                            Text="{Binding Ora}"/>
                 <TextBlock Name="tbkTA_Length" FontSize="18" Foreground="{StaticResource Fore}" 
                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" 
-                           Text="{Binding LunghezzaString}"/>
+                           Text="{Binding LengthString}"/>
                 <TextBlock Name="tbkTA_Calories" FontSize="18" Foreground="{StaticResource Fore}" 
                            HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" 
-                           Text="{Binding CalorieString}"/>
+                           Text="{Binding CaloriesString}"/>
                 <TextBlock Name="tbkTA_Date" FontSize="18" Foreground="{StaticResource Fore}" 
                            HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" 
                            Text="{Binding Data}"/>
